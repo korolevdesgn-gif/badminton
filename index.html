@@ -49,36 +49,69 @@ kbd { font-family: var(--font-display); font-size: 11px; font-weight: 500; paddi
 #hint { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 13px; color: var(--muted); display: flex; gap: 14px; align-items: center; white-space: nowrap; z-index: 4; }
 #hint .serve { color: var(--lamp); }
 
-/* Меню */
-.overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; z-index: 10; overflow: auto; }
+/* Оверлеи: auto-отступы держат содержимое по центру и не обрезают его сверху, если оно выше экрана */
+.overlay { position: fixed; inset: 0; display: flex; padding: 16px; z-index: 10; overflow: auto; }
+.overlay > * { margin: auto; }
 .overlay[hidden] { display: none; }
-#menu { background: linear-gradient(180deg, rgba(11,18,21,0.55), rgba(11,18,21,0.9) 65%); }
-.menu-inner { width: min(780px, 100%); display: grid; gap: 22px; }
+#nameDlg { z-index: 12; background: rgba(8, 13, 15, 0.72); }
+
+/* Меню: заголовок, две карточки режимов, таблица и управление */
+#menu { background: linear-gradient(180deg, rgba(9,14,16,0.86), rgba(9,14,16,0.93)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.menu-inner { width: min(760px, 100%); display: grid; gap: 22px; }
+.menu-head { display: grid; gap: 8px; }
 .eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lamp); }
-h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(44px, 9vw, 100px); line-height: 0.92; letter-spacing: -0.03em; text-wrap: balance; }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(42px, 7.5vw, 80px); line-height: 0.92; letter-spacing: -0.03em; text-wrap: balance; }
 h1 span { color: var(--p1); }
-.lede { margin: 0; color: var(--muted); max-width: 60ch; line-height: 1.5; font-size: 15px; }
-.modes { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
-.mode { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--edge); border-radius: 16px; background: rgba(9,15,17,0.7); }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.mcard { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: 20px; background: rgba(9, 15, 17, 0.82); border: 1px solid var(--edge); }
+.mcard-head h2 { margin: 0 0 4px; font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+.mcard-head p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.4; }
+.mcard-body { display: grid; gap: 10px; margin-top: auto; }
+.mcard-body[hidden] { display: none; }
 .btn { border: 1px solid var(--edge); background: transparent; border-radius: 12px; padding: 13px 18px; font-family: var(--font-display); font-weight: 500; font-size: 14px; }
+.btn.block { width: 100%; }
 .btn.primary { background: var(--p1); border-color: var(--p1); color: #1c0c06; font-weight: 700; }
+.btn.soft { background: rgba(232, 239, 233, 0.07); }
 .btn:hover { border-color: var(--ink); }
 .btn.primary:hover { filter: brightness(1.08); }
-.seg { display: inline-flex; border: 1px solid var(--edge); border-radius: 10px; padding: 3px; gap: 3px; }
-.seg button { border: 0; background: transparent; border-radius: 7px; padding: 6px 10px; font-size: 13px; color: var(--muted); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); border-radius: 12px; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: transparent; border-radius: 9px; padding: 9px 6px; font-size: 13px; color: var(--muted); }
 .seg button[aria-checked="true"] { background: var(--ink); color: var(--hall); font-weight: 600; }
-.keys { display: flex; flex-wrap: wrap; gap: 26px; }
-.cluster { display: grid; gap: 8px; }
-.cluster h3 { margin: 0; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.caps { display: grid; grid-template-columns: repeat(3, 62px); gap: 6px; }
-.cap { height: 54px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 2px; }
-.cap b { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.or { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--edge); }
+.controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; --accent: var(--p1); }
+.controls p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 36ch; }
+.caps { display: grid; grid-template-columns: repeat(3, 56px); gap: 5px; }
+.cap { height: 48px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; }
+.cap b { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
 .cap small { font-size: 10px; color: var(--muted); }
 .cap.shot b { color: var(--accent); }
 .cap.shot { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
-.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; max-width: 66ch; }
-.note b { color: var(--ink); font-weight: 500; }
+.hello { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+.hello b { color: var(--ink); font-weight: 600; }
+.bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+.lb { padding: 16px 18px 12px; border-radius: 20px; background: rgba(9, 15, 17, 0.82); border: 1px solid var(--edge); }
+.lb-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.lb-head h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.lb-head span { font-size: 12px; color: var(--muted); }
+.lb table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.lb th { white-space: nowrap; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; text-align: right; padding: 4px 0 6px; }
+.lb td { padding: 7px 0; border-top: 1px solid var(--edge); text-align: right; white-space: nowrap; }
+.lb th.l, .lb td.l { text-align: left; }
+.lb td.rank { width: 26px; color: var(--muted); }
+.lb td.name { overflow: hidden; text-overflow: ellipsis; max-width: 0; width: 100%; padding-right: 12px; }
+.lb td .of { color: var(--muted); font-size: 12px; }
+.lb th + th, .lb td + td { padding-left: 14px; }
+.lb tr.me td.name { color: var(--lamp); }
+.lb .tag { font-size: 11px; color: var(--lamp); margin-left: 6px; }
+.lb .empty { margin: 4px 0 6px; font-size: 13px; color: var(--muted); }
+.lb .empty[hidden] { display: none; }
+.controls { flex-direction: column; align-items: flex-start; gap: 10px; }
+.controls p { max-width: 186px; }
+.field { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--edge); background: #0e1719; color: var(--ink); font: 500 16px var(--font-body); }
+.card-sub { margin: -8px 0 0; color: var(--muted); font-size: 14px; }
 .only-touch { display: none; }
+.touch-note { margin: 0; font-size: 13px; color: var(--muted); }
 
 /* Пауза и конец партии */
 .card { width: min(420px, 100%); padding: 24px; border-radius: 18px; background: var(--panel); border: 1px solid var(--edge); display: grid; gap: 16px; text-align: center; }
@@ -113,26 +146,27 @@ body.touch .only-keys { display: none; }
 .tbtn.shot { border-color: color-mix(in srgb, var(--p1) 60%, transparent); color: var(--p1); }
 .tbtn.on { background: rgba(255, 215, 138, 0.22); }
 
-.mode-title { margin: 0; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.net-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.net-row[hidden] { display: none; }
-.net-join { display: flex; gap: 6px; }
-#netCode { width: 96px; padding: 11px 10px; border-radius: 12px; border: 1px solid var(--edge); background: #0e1719; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; }
-#netCode::placeholder { color: var(--muted); letter-spacing: 0.04em; font-weight: 500; }
-.net-status { margin: 0; font-size: 13px; color: var(--muted); max-width: 52ch; line-height: 1.5; }
-.net-status .code { display: inline-block; font-family: var(--font-display); font-weight: 900; font-size: 30px; color: var(--lamp); letter-spacing: 0.12em; line-height: 1.1; margin-right: 8px; vertical-align: middle; }
+.net-join { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+#netCode { width: 100%; min-width: 0; padding: 12px 10px; border-radius: 12px; border: 1px solid var(--edge); background: #0e1719; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; }
+#netCode::placeholder { color: var(--muted); letter-spacing: 0.04em; font-weight: 500; text-transform: none; }
+.net-status { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.net-status:empty { display: none; }
 .net-status .err { color: #ff9a7a; }
-.linkbtn { background: none; border: 0; padding: 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
+.wait { display: grid; gap: 10px; }
+.wait .code { font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; letter-spacing: 0.14em; color: var(--lamp); }
+.wait-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.wait-actions .btn { padding: 10px 14px; font-size: 13px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
 #board .mid { font-variant-numeric: tabular-nums; }
+@media (max-width: 620px) { .cards, .bottom { grid-template-columns: 1fr; } }
 @media (max-height: 520px) {
-  h1 { font-size: 46px; }
-  .lede { display: none; }
-  .menu-inner { gap: 14px; }
+  h1 { font-size: 42px; }
+  .menu-inner { gap: 16px; }
+  .mcard { padding: 14px; gap: 12px; }
 }
-body.menu-open #board, body.menu-open #btnPause { visibility: hidden; }
+body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibility: hidden; }
 @media (max-width: 560px) {
   #board .name { display: none; }
-  .caps { grid-template-columns: repeat(3, 54px); }
 }
 </style>
 </head>
@@ -141,7 +175,7 @@ body.menu-open #board, body.menu-open #btnPause { visibility: hidden; }
 
 <div id="board" aria-live="polite">
   <div class="side p1" id="side0"><span class="name"><i class="srv"></i><span id="name0">Ты</span></span><span class="pts" id="pts0">0</span></div>
-  <div class="mid" id="boardMid">до 21</div>
+  <div class="mid" id="boardMid">до 15</div>
   <div class="side p2" id="side1"><span class="pts" id="pts1">0</span><span class="name"><span id="name1">ИИ</span><i class="srv"></i></span></div>
 </div>
 
@@ -166,61 +200,77 @@ body.menu-open #board, body.menu-open #btnPause { visibility: hidden; }
 
 <section class="overlay" id="menu" aria-label="Меню">
   <div class="menu-inner">
-    <p class="eyebrow">Прототип · вид сбоку · одиночка до 21</p>
-    <h1>Бадмин<span>тон</span></h1>
-    <p class="lede">Проверяем одно: весело ли просто перекидываться клирами, дропами и смэшами. Волан летит по настоящей физике, с квадратичным сопротивлением воздуха, поэтому клир падает почти вертикально, а смэш теряет половину скорости ещё до сетки.</p>
-    <div class="modes">
-      <div class="mode">
-        <button class="btn primary" id="playAi">Играть против ИИ</button>
-        <div class="seg" role="radiogroup" aria-label="Сложность ИИ" id="diffSeg">
-          <button role="radio" data-diff="easy" aria-checked="false">Лёгкий</button>
-          <button role="radio" data-diff="medium" aria-checked="true">Средний</button>
-          <button role="radio" data-diff="hard" aria-checked="false">Сложный</button>
+    <header class="menu-head">
+      <p class="eyebrow">Прототип · одиночка до 15</p>
+      <h1>Бадмин<span>тон</span></h1>
+      <p class="hello">Играешь как <b id="meName">…</b> · <button class="linkbtn" id="editName">сменить имя</button></p>
+    </header>
+
+    <div class="cards">
+      <article class="mcard">
+        <div class="mcard-head">
+          <h2>Против ИИ</h2>
+          <p>Выбери уровень соперника</p>
         </div>
-      </div>
-      <div class="mode only-keys">
-        <button class="btn" id="play2p">Вдвоём на одной клавиатуре</button>
-        <span class="note">Левый игрок слева, правый справа</span>
-      </div>
-      <div class="mode" id="onlineCard">
-        <h3 class="mode-title">Онлайн с другом</h3>
-        <div class="net-row" id="netControls">
-          <button class="btn" id="netHost">Создать комнату</button>
+        <div class="mcard-body">
+          <div class="seg" role="radiogroup" aria-label="Сложность ИИ" id="diffSeg">
+            <button role="radio" data-diff="easy" aria-checked="false">Лёгкий</button>
+            <button role="radio" data-diff="medium" aria-checked="true">Средний</button>
+            <button role="radio" data-diff="hard" aria-checked="false">Сложный</button>
+          </div>
+          <button class="btn primary block" id="playAi">Играть</button>
+        </div>
+      </article>
+
+      <article class="mcard" id="onlineCard">
+        <div class="mcard-head">
+          <h2>С другом по сети</h2>
+          <p>Один создаёт комнату, второй входит по коду</p>
+        </div>
+        <div class="mcard-body" id="netControls">
+          <button class="btn soft block" id="netHost">Создать комнату</button>
+          <div class="or">или войти по коду</div>
           <div class="net-join">
-            <input id="netCode" maxlength="4" placeholder="код" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код комнаты">
+            <input id="netCode" maxlength="4" placeholder="Код" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код комнаты">
             <button class="btn" id="netJoin">Войти</button>
           </div>
         </div>
-        <p class="net-status" id="netStatus" aria-live="polite">Один создаёт комнату, второй вводит код. Каждый играет своими кнопками и видит себя слева.</p>
-      </div>
+        <div class="net-status" id="netStatus" aria-live="polite"></div>
+      </article>
     </div>
-    <div class="keys only-keys">
-      <div class="cluster" style="--accent: var(--p1)">
-        <h3>Игрок слева</h3>
-        <div class="caps">
-          <div class="cap shot"><b>Q</b><small>клир</small></div>
-          <div class="cap"><b>W</b><small>прыжок</small></div>
-          <div class="cap shot"><b>E</b><small>дроп</small></div>
-          <div class="cap"><b>A</b><small>назад</small></div>
-          <div class="cap shot"><b>S</b><small>смэш</small></div>
-          <div class="cap"><b>D</b><small>к сетке</small></div>
-        </div>
+
+    <div class="bottom">
+    <section class="lb" aria-label="Таблица побед">
+      <div class="lb-head"><h2>Таблица</h2><span>Обновляется, когда вы играете друг с другом</span></div>
+      <table>
+        <thead><tr><th class="l">#</th><th class="l">Игрок</th><th>Победы</th><th>Против ИИ</th></tr></thead>
+        <tbody id="lbBody"></tbody>
+      </table>
+      <p class="empty" id="lbEmpty">Пока пусто. Сыграй партию, и ты появишься здесь.</p>
+    </section>
+    <div class="controls only-keys">
+      <div class="caps" aria-label="Управление">
+        <div class="cap shot"><b>Q</b><small>клир</small></div>
+        <div class="cap"><b>W</b><small>прыжок</small></div>
+        <div class="cap shot"><b>E</b><small>дроп</small></div>
+        <div class="cap"><b>A</b><small>назад</small></div>
+        <div class="cap shot"><b>S</b><small>смэш</small></div>
+        <div class="cap"><b>D</b><small>к сетке</small></div>
       </div>
-      <div class="cluster" style="--accent: var(--p2)">
-        <h3>Игрок справа</h3>
-        <div class="caps">
-          <div class="cap shot"><b>U</b><small>дроп</small></div>
-          <div class="cap"><b>I</b><small>прыжок</small></div>
-          <div class="cap shot"><b>O</b><small>клир</small></div>
-          <div class="cap"><b>J</b><small>к сетке</small></div>
-          <div class="cap shot"><b>K</b><small>смэш</small></div>
-          <div class="cap"><b>L</b><small>назад</small></div>
-        </div>
-      </div>
+      <p>Если волан ниже плеча, эти же кнопки дают свечу, сетку и драйв. <kbd>Esc</kbd> пауза</p>
     </div>
-    <p class="note only-keys">Логика кнопок по направлению: вверх-назад — <b>клир</b>, вверх к сетке — <b>дроп</b>, вниз — <b>смэш</b>. Если волан ниже плеча, те же кнопки дают <b>свечу</b>, <b>сетку или блок</b> и <b>драйв</b>. Подача: клир — высокая, дроп — короткая, смэш — флик. Против ИИ можно играть любой из двух раскладок, а также стрелками и пробелом.</p>
-    <p class="note only-touch">Слева бег, справа удары. Если волан ниже плеча, те же кнопки дают свечу, сетку и драйв. Лучше держать телефон горизонтально.</p>
+    </div>
+    <p class="touch-note only-touch">Слева бег, справа удары. Держи телефон горизонтально.</p>
   </div>
+</section>
+
+<section class="overlay" id="nameDlg" hidden aria-label="Имя игрока">
+  <form class="card" id="nameForm" novalidate>
+    <h2>Как тебя зовут?</h2>
+    <p class="card-sub">Имя увидят соперники и таблица побед</p>
+    <input class="field" id="nameInput" maxlength="16" autocomplete="nickname" placeholder="Имя" aria-label="Имя">
+    <button class="btn primary block" type="submit">Готово</button>
+  </form>
 </section>
 
 <section class="overlay" id="pause" hidden aria-label="Пауза">
@@ -273,6 +323,7 @@ body.menu-open #board, body.menu-open #btnPause { visibility: hidden; }
 const COURT = 13.4, NET = 6.7, NET_H = 1.524, NET_LOW = 0.76, POST_H = 1.55, SHORT = 1.98;
 const HALF_W = 3.05, SINGLES_W = 2.59, DBL_LONG = 0.76;
 const G = 9.81, H = 1 / 240, DEG = Math.PI / 180;
+const TARGET = 15, CAP = 21; // до 15, нужен отрыв в 2 очка, но не дольше 21
 const SHOULDER = 1.45, HIP = 0.95, JUMP_V = 3.6;
 const VIEW_L = -1.7, VIEW_R = COURT + 1.7, VIEW_TOP = 8.0, VIEW_BOTTOM = -1.05;
 const DZX = 0.055, DZY = 0.11; // косая проекция глубины: дальняя сторона корта выше и правее
@@ -398,10 +449,10 @@ function setupMode(mode, diff) {
   P[1].remote = online && Net.role === 'host';
   for (const p of P) { p.tx = undefined; p.ty = undefined; }
   if (online) {
-    P[0].name = Net.myIdx === 0 ? 'Ты' : 'Друг';
-    P[1].name = Net.myIdx === 1 ? 'Ты' : 'Друг';
+    P[Net.myIdx].name = profile.name || 'Ты';
+    P[1 - Net.myIdx].name = Net.peerName || 'Друг';
   } else {
-    P[0].name = mode === '1p' ? 'Ты' : mode === '2p' ? 'Игрок слева' : 'ИИ';
+    P[0].name = mode === '1p' ? (profile.name || 'Ты') : mode === '2p' ? 'Игрок слева' : 'ИИ';
     P[1].name = mode === '1p' ? 'ИИ · ' + DIFFS[game.diff].label : mode === '2p' ? 'Игрок справа' : 'ИИ';
   }
   setMirror(online && Net.role === 'guest');
@@ -532,7 +583,7 @@ function award(w, label) {
   game.state = 'point'; game.stateT = 0;
   fx('popup', label, +clamp(sh.x, VIEW_L + 1, VIEW_R - 1).toFixed(2), 0.75, w.color, true, true);
   const a = game.score[w.idx], b = game.score[1 - w.idx];
-  if ((a >= 21 && a - b >= 2) || a >= 30) game.over = w.idx;
+  if ((a >= TARGET && a - b >= 2) || a >= CAP) game.over = w.idx;
   fx('point', w.idx);
   updateBoard(); updateHint();
 }
@@ -726,12 +777,19 @@ function step(h) {
 function endGame() {
   if (game.mode === 'demo') { newGame(); return; }
   game.state = 'over';
+  const now = Date.now();
+  if (game.mode === '1p') {
+    noteName(profile.pid, profile.name, now);
+    addRecs([{ id: rid(12), t: now, k: 'ai', p: profile.pid, lv: game.diff, win: game.over === 0, s: [game.score[0], game.score[1]] }]);
+  } else if (game.mode === 'online' && Net.role === 'host' && Net.peerPid) {
+    fx('match', { id: rid(12), t: now, k: 'net', a: profile.pid, b: Net.peerPid, w: game.over === 0 ? profile.pid : Net.peerPid, s: [game.score[0], game.score[1]] });
+  }
   showOver();
 }
 function showOver() {
   const w = game.over, me = localIdx();
   let title;
-  if (game.mode === 'online') title = w === me ? 'Партия за тобой' : 'Партия за другом';
+  if (game.mode === 'online') title = w === me ? 'Партия за тобой' : 'Победитель: ' + (Net.peerName || 'друг');
   else if (game.mode === '1p') title = w === 0 ? 'Партия за тобой' : 'Партия за ИИ';
   else title = w === 0 ? 'Победил игрок слева' : 'Победил игрок справа';
   $('overTitle').textContent = title;
@@ -965,8 +1023,12 @@ function drawWall(c, dt) {
     const label = game.state === 'serve' ? 'ПОДАЧА' : 'РОЗЫГРЫШ, УДАРОВ';
     c.fillText(label, cx, cy - sc * 0.35);
     c.fillStyle = COLORS.ink;
-    c.font = `700 ${sc * 0.72}px ${disp}`;
-    c.fillText(game.state === 'serve' ? P[game.server].name.split(' ·')[0].toUpperCase() : String(game.rallyHits), cx, cy + sc * 0.5);
+    const big = game.state === 'serve' ? P[game.server].name.split(' ·')[0].toUpperCase() : String(game.rallyHits);
+    let fs = sc * 0.72;
+    c.font = `700 ${fs}px ${disp}`;
+    const tw = c.measureText(big).width;
+    if (tw > w * 0.86) { fs *= (w * 0.86) / tw; c.font = `700 ${fs}px ${disp}`; }
+    c.fillText(big, cx, cy + sc * 0.5);
   }
   c.restore();
 }
@@ -1148,7 +1210,7 @@ function updateBoard() {
   $('pts0').style.color = P[L].color; $('pts1').style.color = P[Rr].color;
   $('side0').classList.toggle('serving', game.server === L);
   $('side1').classList.toggle('serving', game.server === Rr);
-  if (game.mode !== 'online') $('boardMid').textContent = 'до 21';
+  if (game.mode !== 'online') $('boardMid').textContent = 'до 15';
 }
 function updateHint() {
   const el = $('hint');
@@ -1179,6 +1241,7 @@ function toMenu() {
   setNetStatus(NET_HINT);
   $('over').hidden = true; $('pause').hidden = true; $('menu').hidden = false;
   document.body.classList.add('menu-open');
+  renderStandings();
   game.paused = false;
   setupMode('demo');
   $('playAi').focus();
@@ -1190,8 +1253,7 @@ function togglePause(force) {
   if (game.paused) { keys.clear(); $('resume').focus(); } else canvas.focus();
 }
 
-$('playAi').addEventListener('click', () => startGame('1p'));
-$('play2p').addEventListener('click', () => startGame('2p'));
+$('playAi').addEventListener('click', () => { if (!needName()) startGame('1p'); });
 $('resume').addEventListener('click', () => togglePause(false));
 $('toMenu1').addEventListener('click', toMenu);
 $('toMenu2').addEventListener('click', toMenu);
@@ -1231,7 +1293,7 @@ $('tReset').addEventListener('click', () => { Object.assign(cfg, DEFAULTS); sync
    отправляет позицию и нажатия, а получает снимки игры ~60 раз в секунду.
    Попадания гостя хозяин засчитывает с поправкой на пинг: если волан был в досягаемости
    в пределах последнего пинга, удар принимается. Канал — WebRTC через PeerJS. */
-const NET_HINT = 'Один создаёт комнату, второй вводит код. Каждый играет своими кнопками и видит себя слева.';
+const NET_HINT = '';
 const PEER_PREFIX = 'bdm-proto-26-';
 const CODE_ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const USE_LOCAL = /[?&]net=local\b/.test(location.search);
@@ -1240,7 +1302,8 @@ const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000
 const Net = {
   role: null, myIdx: 0, transport: null, connected: false, code: '',
   reset() {
-    Object.assign(this, { role: null, myIdx: 0, transport: null, connected: false, code: '', outN: 0, lastInN: 0, lastSnapN: 0,
+    clearInterval(this.syncIv);
+    Object.assign(this, { peerPid: null, peerName: '', syncIv: null, role: null, myIdx: 0, transport: null, connected: false, code: '', outN: 0, lastInN: 0, lastSnapN: 0,
       evSeq: 0, events: [], eventAck: 0, lastEv: 0, shotSeq: 0, shotKey: null, lastShotSeq: 0, posEpoch: -1,
       againSeq: 0, lastAg: 0, rtt: 0, remoteRtt: 0.1, lastTs: 0, lastRecv: 0, lastSend: 0, lastPing: 0, joinTimer: null, savedCfg: null, retries: 0 });
   },
@@ -1253,7 +1316,7 @@ const Net = {
     if (now - this.lastPing > 500 && game.mode === 'online') {
       this.lastPing = now;
       const ms = Math.round((this.role === 'host' ? this.remoteRtt : this.rtt) * 1000);
-      $('boardMid').textContent = ms ? 'пинг ' + ms + ' мс' : 'до 21';
+      $('boardMid').textContent = ms ? 'пинг ' + ms + ' мс' : 'до 15';
     }
   },
 };
@@ -1332,9 +1395,9 @@ function netCallbacks() {
     onOpen(code) {
       Net.code = code;
       const link = /^https?:$/.test(location.protocol) && !inClaude() ? location.origin + location.pathname + '#' + code : '';
-      setNetStatus(`<span class="code">${code}</span>Отправь код другу. Как только он войдёт, игра начнётся.` +
-        (link ? ` <button class="linkbtn" id="copyLink">Скопировать ссылку</button>` : '') +
-        ` <button class="linkbtn" id="netCancel">Отменить</button>`);
+      $('netControls').hidden = true;
+      setNetStatus(`<div class="wait"><span class="code">${code}</span><span>Отправь код${link ? ' или ссылку' : ''} другу. Игра начнётся, как только он войдёт.</span>` +
+        `<span class="wait-actions">${link ? '<button class="btn soft" id="copyLink">Скопировать ссылку</button>' : ''}<button class="linkbtn" id="netCancel">Отменить</button></span></div>`);
       const cl = $('copyLink');
       if (cl) cl.addEventListener('click', () => { try { navigator.clipboard.writeText(link).then(() => { cl.textContent = 'Скопировано'; }, () => { cl.textContent = link; }); } catch (_) { cl.textContent = link; } });
       $('netCancel').addEventListener('click', () => { netClose(); setNetStatus(NET_HINT); });
@@ -1342,6 +1405,7 @@ function netCallbacks() {
     onConnect() {
       Net.connected = true; Net.lastRecv = performance.now();
       clearTimeout(Net.joinTimer);
+      startSync();
       if (Net.role === 'host') startGame('online');
       else setNetStatus('Соединились, ждём начала…');
     },
@@ -1378,6 +1442,7 @@ function netClose() {
   clearTimeout(Net.joinTimer);
   if (Net.savedCfg) { Object.assign(cfg, Net.savedCfg); syncTune(); }
   Net.reset();
+  if (!(inClaude() && !USE_LOCAL)) $('netControls').hidden = false;
 }
 function netFail(msg) { netClose(); setNetStatus('<span class="err">' + msg + '</span>'); }
 function netLost(msg) {
@@ -1389,6 +1454,7 @@ function netLost(msg) {
 
 function handleNet(m) {
   if (!m || typeof m !== 'object') return;
+  if (m.t === 'sync') { onSync(m); return; }
   if (m.t === 'bye') { netLost(Net.role === 'host' ? 'Друг вышел из игры' : 'Друг закрыл комнату'); return; }
   if (Net.role === 'host') { if (m.t === 'in') onGuestInput(m); }
   else if (m.t === 'st') onSnapshot(m);
@@ -1403,7 +1469,7 @@ function sendSnapshot() {
   Net.send({
     t: 'st', n: ++Net.outN, p: pl,
     s: [r3(sh.x), r3(sh.y), r3(sh.vx), r3(sh.vy), sh.held ? 1 : 0, sh.inPlay ? 1 : 0, r3(sh.ang), sh.netHit ? 1 : 0, sh.lastHitter ? sh.lastHitter.idx : -1, sh.predLand == null ? null : r2(sh.predLand)],
-    g: [game.state, game.score[0], game.score[1], game.server, game.rallyHits, game.over, game.posEpoch],
+    g: [game.state, game.score[0], game.score[1], game.server, game.rallyHits, game.over, game.posEpoch], id: profile.pid, nm: profile.name,
     c: [cfg.timeScale, cfg.runSpeed, cfg.reach, cfg.vTerm],
     ev: Net.events.filter(e => e[0] > Net.eventAck), rt: Net.lastTs,
   });
@@ -1411,6 +1477,7 @@ function sendSnapshot() {
 function onGuestInput(m) {
   if (!(m.n > Net.lastInN)) return;
   Net.lastInN = m.n;
+  setPeer(m.id, m.nm);
   const p = P[1];
   if (m.ep === game.posEpoch && Number.isFinite(m.x) && Number.isFinite(m.y)) {
     p.x = clampX(p, m.x); p.y = clamp(m.y, 0, 1.2);
@@ -1426,7 +1493,7 @@ function onGuestInput(m) {
 function sendInput() {
   const me = P[Net.myIdx];
   Net.send({ t: 'in', n: ++Net.outN, x: r3(me.x), y: r3(me.y), vx: r2(me.vx), vy: r2(me.vy), g: me.onGround ? 1 : 0,
-    ep: Net.posEpoch, sq: Net.shotSeq, sk: Net.shotKey, ag: Net.againSeq, ea: Net.lastEv, ts: performance.now(), rtt: r3(Net.rtt) });
+    ep: Net.posEpoch, sq: Net.shotSeq, sk: Net.shotKey, ag: Net.againSeq, ea: Net.lastEv, ts: performance.now(), rtt: r3(Net.rtt), id: profile.pid, nm: profile.name });
 }
 function guestAction(p, act) {
   if (act === 'jump') { p.jumpReq = 0.12; return; }
@@ -1438,6 +1505,7 @@ function guestAction(p, act) {
 function onSnapshot(m) {
   if (!(m.n > Net.lastSnapN)) return;
   Net.lastSnapN = m.n;
+  setPeer(m.id, m.nm);
   if (game.mode !== 'online') startGame('online');
   const c = m.c || [];
   if (c.length === 4 && c.every(Number.isFinite)) { cfg.timeScale = c[0]; cfg.runSpeed = c[1]; cfg.reach = c[2]; cfg.vTerm = c[3]; K = G / (cfg.vTerm * cfg.vTerm); }
@@ -1495,6 +1563,7 @@ function applyFx(type, a) {
     case 'floor': sndFloor(); break;
     case 'point': sndPoint(game.mode === '2p' || a[0] === localIdx()); break;
     case 'recover': if (Net.role === 'guest' && a[0] === Net.myIdx) P[a[0]].recover = a[1]; break;
+    case 'match': addRecs([a[0]]); break;
   }
 }
 function fx(type, ...a) {
@@ -1502,10 +1571,126 @@ function fx(type, ...a) {
   applyFx(type, a);
 }
 
-$('netHost').addEventListener('click', () => { unlockAudio(); netHost(); });
-$('netJoin').addEventListener('click', () => { unlockAudio(); netJoin(); });
-$('netCode').addEventListener('keydown', e => { if (e.key === 'Enter') { unlockAudio(); netJoin(); } });
+$('netHost').addEventListener('click', () => { unlockAudio(); if (!needName()) netHost(); });
+$('netJoin').addEventListener('click', () => { unlockAudio(); if (!needName()) netJoin(); });
+$('netCode').addEventListener('keydown', e => { if (e.key === 'Enter') { unlockAudio(); if (!needName()) netJoin(); } });
 $('netCode').addEventListener('input', e => { const v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); if (v !== e.target.value) e.target.value = v; });
+
+
+/* ========= Профиль и таблица =========
+   Каждый матч — запись с уникальным id. Устройства хранят записи у себя и обмениваются ими
+   при каждом онлайн-подключении, поэтому таблица постепенно сходится у всей компании без сервера. */
+// ?p=2 — второй профиль в том же браузере, для проверки на одном компьютере
+const SLOT = (/[?&]p=(\d)\b/.exec(location.search) || [])[1] || '';
+function loadJSON(k, d) { k += SLOT; try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } }
+function saveJSON(k, v) { k += SLOT; try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
+function rid(n) { const a = 'abcdefghijkmnpqrstuvwxyz23456789'; let s = ''; for (let i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+function cleanName(v) { return String(v || '').replace(/[\u0000-\u001f\u007f-\u009f\u00ad\u200b-\u200f\u2028-\u202e\u2060-\u2069\ufeff]/g, '').replace(/\s+/g, ' ').trim().slice(0, 16); }
+const profile = loadJSON('bdm-profile', null) || {};
+if (typeof profile.pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(profile.pid)) profile.pid = rid(10);
+profile.name = cleanName(profile.name);
+const store = { recs: [], names: {} };
+{ const r = loadJSON('bdm-recs', []), n = loadJSON('bdm-names', {}); if (Array.isArray(r)) store.recs = r; if (n && typeof n === 'object') store.names = n; }
+function saveStore() { if (store.recs.length > 800) store.recs = store.recs.slice(-800); saveJSON('bdm-recs', store.recs); saveJSON('bdm-names', store.names); }
+function noteName(pid, name, t) {
+  name = cleanName(name);
+  if (typeof pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(pid) || !name || !Number.isFinite(t)) return false;
+  const cur = store.names[pid];
+  if (!Array.isArray(cur) || !(cur[1] >= t)) { store.names[pid] = [name, t]; return true; }
+  return false;
+}
+const PID = /^[a-z0-9]{6,16}$/;
+function cleanRec(r) {
+  if (!r || typeof r.id !== 'string' || !/^[a-z0-9]{8,24}$/.test(r.id) || !Number.isFinite(r.t)) return null;
+  const s = Array.isArray(r.s) && r.s.length === 2 && r.s.every(v => Number.isInteger(v) && v >= 0 && v <= 30) ? [r.s[0], r.s[1]] : [0, 0];
+  if (r.k === 'ai' && PID.test(r.p) && DIFFS[r.lv] && typeof r.win === 'boolean') return { id: r.id, t: r.t, k: 'ai', p: r.p, lv: r.lv, win: r.win, s };
+  if (r.k === 'net' && PID.test(r.a) && PID.test(r.b) && r.a !== r.b && (r.w === r.a || r.w === r.b)) return { id: r.id, t: r.t, k: 'net', a: r.a, b: r.b, w: r.w, s };
+  return null;
+}
+function addRecs(list) {
+  const have = new Set(store.recs.map(r => r.id));
+  let added = 0;
+  for (const raw of Array.isArray(list) ? list : []) { const r = cleanRec(raw); if (r && !have.has(r.id)) { store.recs.push(r); have.add(r.id); added++; } }
+  if (added) { store.recs.sort((a, b) => a.t - b.t); saveStore(); renderStandings(); }
+  return added;
+}
+function standings() {
+  const st = {};
+  const row = pid => st[pid] || (st[pid] = { pid, w: 0, n: 0, aw: 0, an: 0, lv: { easy: 0, medium: 0, hard: 0 } });
+  for (const r of store.recs) {
+    if (r.k === 'net') { const a = row(r.a), b = row(r.b); a.n++; b.n++; (r.w === r.a ? a : b).w++; }
+    else { const a = row(r.p); a.an++; if (r.win) { a.aw++; a.lv[r.lv]++; } }
+  }
+  const rows = Object.values(st).map(x => ({ ...x, name: (store.names[x.pid] && store.names[x.pid][0]) || (x.pid === profile.pid ? profile.name : 'Игрок') }));
+  rows.sort((a, b) => b.w - a.w || (b.w - (b.n - b.w)) - (a.w - (a.n - a.w)) || b.aw - a.aw || a.name.localeCompare(b.name));
+  return rows;
+}
+function renderStandings() {
+  const body = $('lbBody'); if (!body) return;
+  const rows = standings();
+  let shown = rows.slice(0, 6);
+  const mine = rows.findIndex(r => r.pid === profile.pid);
+  if (mine >= 6) shown = rows.slice(0, 5).concat([rows[mine]]);
+  body.textContent = '';
+  for (const r of shown) {
+    const tr = document.createElement('tr');
+    if (r.pid === profile.pid) tr.className = 'me';
+    const td = (cls, txt) => { const c = document.createElement('td'); if (cls) c.className = cls; if (txt !== undefined) c.textContent = txt; tr.appendChild(c); return c; };
+    td('rank l', String(rows.indexOf(r) + 1));
+    const nm = td('name l', r.name);
+    if (r.pid === profile.pid) { const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'ты'; nm.appendChild(t); }
+    const cell = (w, n) => { const c = td(''); c.textContent = String(w); const o = document.createElement('span'); o.className = 'of'; o.textContent = ' из ' + n; c.appendChild(o); return c; };
+    cell(r.w, r.n);
+    const ai = cell(r.aw, r.an);
+    ai.title = 'Победы над ИИ: лёгкий ' + r.lv.easy + ' · средний ' + r.lv.medium + ' · сложный ' + r.lv.hard;
+    body.appendChild(tr);
+  }
+  $('lbEmpty').hidden = rows.length > 0;
+}
+function renderHello() { $('meName').textContent = profile.name || '…'; }
+function openNameDlg() { $('nameInput').value = profile.name || ''; $('nameDlg').hidden = false; setTimeout(() => $('nameInput').focus(), 30); }
+function needName() { if (profile.name) return false; openNameDlg(); return true; }
+$('nameForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const n = cleanName($('nameInput').value);
+  if (!n) { $('nameInput').focus(); return; }
+  profile.name = n; saveJSON('bdm-profile', profile);
+  noteName(profile.pid, n, Date.now()); saveStore();
+  $('nameDlg').hidden = true;
+  renderHello(); renderStandings();
+  if (game.mode !== 'demo') { P[localIdx()].name = n; updateBoard(); }
+});
+$('nameDlg').addEventListener('keydown', e => { if (e.key === 'Escape' && profile.name) $('nameDlg').hidden = true; });
+$('editName').addEventListener('click', openNameDlg);
+// Обмен записями при подключении: небольшими пачками, по кругу несколько раз (канал может терять сообщения)
+function startSync() {
+  clearInterval(Net.syncIv);
+  const recs = store.recs.slice(-300), chunks = [];
+  for (let k = 0; k < recs.length; k += 30) chunks.push(recs.slice(k, k + 30));
+  const names = Object.fromEntries(Object.entries(store.names).sort((a, b) => b[1][1] - a[1][1]).slice(0, 120));
+  let i = 0;
+  const total = Math.max(6, chunks.length * 3);
+  Net.syncIv = setInterval(() => {
+    if (!Net.connected || i >= total) { clearInterval(Net.syncIv); return; }
+    if (i % 3 === 0) Net.send({ t: 'sync', n: names });
+    else if (chunks.length) Net.send({ t: 'sync', r: chunks[i % chunks.length] });
+    i++;
+  }, 300);
+}
+function onSync(m) {
+  let changed = false;
+  if (m.n && typeof m.n === 'object') for (const pid of Object.keys(m.n).slice(0, 200)) { const v = m.n[pid]; if (Array.isArray(v) && noteName(pid, v[0], v[1])) changed = true; }
+  if (changed) { saveStore(); renderStandings(); }
+  if (m.r) addRecs(m.r.slice(0, 60));
+}
+function setPeer(pid, nm) {
+  if (typeof pid !== 'string' || !PID.test(pid)) return;
+  nm = cleanName(nm) || 'Друг';
+  if (Net.peerPid === pid && Net.peerName === nm) return;
+  Net.peerPid = pid; Net.peerName = nm;
+  if (noteName(pid, nm, Date.now())) { saveStore(); renderStandings(); }
+  if (game.mode === 'online') { P[1 - Net.myIdx].name = nm; updateBoard(); }
+}
 
 /* ========= Цикл ========= */
 let last = performance.now(), acc = 0;
@@ -1527,7 +1712,7 @@ function frame(now) {
 
 // Для отладки и автотестов
 window.__bdm = {
-  game, P, sh, cfg, simulate, Net,
+  game, P, sh, cfg, simulate, Net, store, profile, standings,
   fastForward(sec) { const n = Math.round(sec / H); for (let i = 0; i < n && game.state !== 'over'; i++) step(H); game.hitstop = 0; },
 };
 
@@ -1546,9 +1731,11 @@ function start(data) {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildBackground).catch(() => {});
   setupMode('demo');
   const hm = /^#([A-Za-z0-9]{4})$/.exec(location.hash);
-  if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен. Нажми «Войти».'); }
-  if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Онлайн работает на сайте игры: korolevdesgn-gif.github.io/badminton. Внутри claude.ai браузер не даёт игрокам соединиться напрямую.'); }
+  if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен, нажми «Войти».'); }
+  if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Внутри claude.ai браузер не даёт игрокам соединиться напрямую. Играй по сети на сайте: <a href="https://korolevdesgn-gif.github.io/badminton/" style="color: var(--ink)">korolevdesgn-gif.github.io/badminton</a>'); }
   window.addEventListener('beforeunload', () => { if (Net.role) netClose(); });
+  renderHello(); renderStandings();
+  if (!profile.name) openNameDlg();
   requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 }
 try { window.claude?.hot?.snapshot?.(() => ({ cfg: { ...cfg }, diff: game.diff })); } catch (_) {}
