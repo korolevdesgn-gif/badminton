@@ -2076,7 +2076,11 @@ function renderHello() {
 }
 const DIFF_NOTE = { easy: 'Медленный и часто ошибается. Для разминки', medium: 'Держит розыгрыш, но ошибается под давлением', hard: 'Быстрая реакция, редкие ошибки, любит смэш' };
 function renderDiffNote() { $('diffNote').textContent = DIFF_NOTE[game.diff]; }
-function nameTaken(n) { n = cleanName(n).toLowerCase(); return !!n && Object.entries(store.names).some(([pid, v]) => pid !== profile.pid && Array.isArray(v) && String(v[0]).toLowerCase() === n); }
+function nameTaken(n) {
+  n = cleanName(n).toLowerCase(); if (!n) return false;
+  const played = new Set(); for (const r of store.recs) { if (r.k === 'net') { played.add(r.a); played.add(r.b); } else played.add(r.p); }
+  return Object.entries(store.names).some(([pid, v]) => pid !== profile.pid && played.has(pid) && Array.isArray(v) && String(v[0]).toLowerCase() === n);
+}
 $('nameInput').addEventListener('input', e => { $('nameAva').textContent = (cleanName(e.target.value) || '?').charAt(0).toUpperCase(); $('nameWarn').hidden = !nameTaken(e.target.value); });
 let pickStyle = profile.style;
 function syncStyleSeg() { for (const o of document.querySelectorAll('#styleSeg button')) o.setAttribute('aria-checked', String(o.dataset.style === pickStyle)); }
