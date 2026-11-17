@@ -187,6 +187,38 @@ body.touch .sidepanel .about { padding-top: 0; border-top: 0; }
 .card .row .btn { flex: 1 1 140px; }
 #pause, #over, #netlost { background: rgba(8, 13, 15, 0.8); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 
+/* Лобби, реакции, телефон */
+.lobby { display: grid; gap: 8px; }
+.lobby[hidden] { display: none; }
+.lobby-title { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.lobby-title::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #7be3a6; box-shadow: 0 0 8px #7be3a6; }
+.lobby-list { display: grid; gap: 6px; }
+.lobby-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.18); text-align: left; }
+.lobby-item:hover { border-color: var(--p2); }
+.lobby-item .ln { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lobby-item .go { font: 700 12px var(--font-display); color: var(--p2); }
+.av { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 700 11px var(--font-display); color: #0b1215; flex: none; vertical-align: middle; }
+.lb td.name .av { width: 22px; height: 22px; margin-right: 9px; }
+.name-warn { margin: -6px 0 0; font-size: 12.5px; color: var(--lamp); line-height: 1.4; }
+.name-warn[hidden] { display: none; }
+.inapp { margin: 0; padding: 10px 12px; border-radius: 12px; background: rgba(255, 215, 138, 0.08); border: 1px solid rgba(255, 215, 138, 0.3); color: var(--lamp); font-size: 13px; line-height: 1.45; }
+.inapp[hidden] { display: none; }
+.reacts { position: fixed; top: 12px; left: 14px; display: grid; gap: 6px; z-index: 6; }
+.reacts[hidden] { display: none; }
+.reacts button { display: flex; align-items: center; gap: 8px; padding: 7px 12px 7px 8px; border-radius: 999px; border: 1px solid var(--edge); background: var(--panel); font-size: 13px; font-weight: 500; text-align: left; }
+.reacts button:hover { border-color: rgba(232, 239, 233, 0.4); }
+.reacts kbd { min-width: 20px; text-align: center; }
+body.touch .reacts kbd { display: none; }
+body.menu-open .reacts { display: none; }
+.rotate { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 24px; background: rgba(8, 13, 15, 0.96); text-align: center; }
+.rotate p { margin: 0; font: 700 18px var(--font-display); line-height: 1.35; }
+.rotate small { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; }
+.rotate .phone { display: block; width: 44px; height: 74px; margin: 0 auto 22px; border: 3px solid var(--ink); border-radius: 10px; animation: turn 1.8s ease-in-out infinite; }
+@keyframes turn { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (prefers-reduced-motion: reduce) { .rotate .phone { animation: none; transform: rotate(-90deg); } }
+@media (orientation: portrait) { body.touch.playing .rotate { display: grid; } }
+.tpad.left::before { content: "при ударе ◀ ▶ — прицел"; position: absolute; left: 2px; bottom: 100%; margin-bottom: 7px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+
 /* Правила */
 #rules { z-index: 13; background: rgba(8, 13, 15, 0.82); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 .rules-card { width: min(720px, 100%); padding: 18px 20px 20px; border-radius: 22px; background: var(--surface); border: 1px solid var(--edge); display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
@@ -337,6 +369,12 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
               <p>Один создаёт комнату, второй входит по коду. Каждый видит себя слева</p>
             </div>
             <div class="mcard-body" id="netControls">
+              <p class="inapp" id="inapp" hidden>Ты во встроенном браузере приложения. Если онлайн не соединяется, открой ссылку в Safari или Chrome.</p>
+              <div class="lobby" id="lobby" hidden>
+                <div class="lobby-title">Ждут соперника</div>
+                <div class="lobby-list" id="lobbyList"></div>
+                <div class="or">или</div>
+              </div>
               <button class="btn accent block" id="netHost">Создать комнату</button>
               <div class="or">или войти по коду</div>
               <div class="net-join">
@@ -389,6 +427,7 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
     <h2>Как тебя зовут?</h2>
     <p class="card-sub">Имя увидят соперники и таблица. Стиль можно поменять в любой момент</p>
     <input class="field" id="nameInput" maxlength="16" autocomplete="nickname" placeholder="Имя" aria-label="Имя">
+    <p class="name-warn" id="nameWarn" hidden>Такое имя уже есть в таблице. Добавь букву фамилии или ник, чтобы вас не путали.</p>
     <div class="styles" role="radiogroup" aria-label="Стиль игры" id="styleSeg">
       <button type="button" role="radio" data-style="attack" aria-checked="false"><b>Атака</b><small>смэш сильнее, устаёшь быстрее</small></button>
       <button type="button" role="radio" data-style="tech" aria-checked="true"><b>Техника</b><small>точные дропы, шире чистый удар</small></button>
@@ -447,6 +486,15 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
     </div>
   </div>
 </section>
+
+<div class="reacts" id="reacts" hidden aria-label="Реакции">
+  <button data-r="0"><kbd>1</kbd>Смэш мне в ногу!</button>
+  <button data-r="1"><kbd>2</kbd>Ну ты даёшь</button>
+  <button data-r="2"><kbd>3</kbd>Реванш?</button>
+  <button data-r="3"><kbd>4</kbd>GG</button>
+</div>
+
+<div class="rotate" id="rotate" aria-live="polite"><div><span class="phone" aria-hidden="true"></span><p>Поверни телефон горизонтально</p><small>Корт широкий, так удобнее играть</small></div></div>
 
 <div id="touch" aria-hidden="true">
   <div class="tpad left">
@@ -586,7 +634,7 @@ const sh = { x: 0, y: 1, vx: 0, vy: 0, held: true, inPlay: false, lastHitter: nu
 const game = {
   mode: 'demo', diff: 'medium', state: 'serve', stateT: 0, score: [0, 0], server: 0, over: null,
   time: 0, hitId: 0, rallyHits: 0, paused: false, hitstop: 0, shake: 0, posEpoch: 0,
-  wall: null, popups: [],
+  wall: null, popups: [], bubbles: [],
   stats: { rallies: 0, hits: 0, totalRallyHits: 0, shots: {}, ends: {} },
 };
 
@@ -621,7 +669,7 @@ function setupMode(mode, diff) {
 function newGame() {
   for (const p of P) { p.sta = 1; p.press = 0; }
   game.score = [0, 0]; game.over = null; game.server = 0; game.time = 0;
-  game.popups = []; game.wall = null;
+  game.popups = []; game.wall = null; game.bubbles = [];
   setupServe();
   updateBoard();
 }
@@ -1087,6 +1135,7 @@ window.addEventListener('keydown', e => {
   if (e.code === 'KeyM') { cfg.sound = !cfg.sound; syncTune(); saveCfg(); return; }
   if (e.code === 'Enter' && game.state === 'over' && !$('over').hidden && document.activeElement.tagName !== 'BUTTON') { restart(); return; }
   if (e.repeat) return;
+  if (game.mode === 'online' && $('menu').hidden && /^Digit[1-4]$/.test(e.code)) { sendReact(+e.code.slice(5) - 1); return; }
   keys.add(e.code);
   if (!inGame || game.paused) return;
   for (const p of P) {
@@ -1504,6 +1553,7 @@ function render(dt) {
   drawNearPost(ctx);
   drawShuttle(ctx);
   drawPopups(ctx, dt);
+  drawBubbles(ctx, dt);
   ctx.restore();
 }
 
@@ -1550,8 +1600,10 @@ function startGame(mode) {
   unlockAudio();
   $('menu').hidden = true; $('over').hidden = true; $('pause').hidden = true;
   document.body.classList.remove('menu-open');
+  document.body.classList.add('playing');
   game.paused = false;
   setupMode(mode, game.diff);
+  $('reacts').hidden = mode !== 'online';
   canvas.focus();
 }
 function restart() { startGame(game.mode); }
@@ -1561,7 +1613,9 @@ function toMenu() {
   setNetStatus(NET_HINT);
   $('over').hidden = true; $('pause').hidden = true; $('menu').hidden = false;
   document.body.classList.add('menu-open');
-  renderStandings(); cloudSync();
+  document.body.classList.remove('playing');
+  $('reacts').hidden = true;
+  renderStandings(); cloudSync(); lobbyRefresh();
   game.paused = false;
   setupMode('demo');
   $('playAi').focus();
@@ -1626,7 +1680,7 @@ const Net = {
     clearInterval(this.syncIv);
     Object.assign(this, { peerPid: null, peerName: '', peerStyle: null, syncIv: null, role: null, myIdx: 0, transport: null, connected: false, code: '', outN: 0, lastInN: 0, lastSnapN: 0,
       evSeq: 0, events: [], eventAck: 0, lastEv: 0, shotSeq: 0, shotKey: null, lastShotSeq: 0, posEpoch: -1,
-      againSeq: 0, lastAg: 0, rtt: 0, remoteRtt: 0.1, lastTs: 0, lastRecv: 0, lastSend: 0, lastPing: 0, joinTimer: null, savedCfg: null, retries: 0 });
+      againSeq: 0, lastAg: 0, lobbyBeat: null, reactSeq: 0, reactI: 0, lastRq: 0, lastReact: 0, rtt: 0, remoteRtt: 0.1, lastTs: 0, lastRecv: 0, lastSend: 0, lastPing: 0, joinTimer: null, savedCfg: null, retries: 0 });
   },
   lagGame() { return clamp(this.remoteRtt || 0.1, 0.02, 0.3) * cfg.timeScale; },
   send(m) { if (this.transport && this.connected) this.transport.send(m); },
@@ -1717,7 +1771,8 @@ function netCallbacks() {
       Net.code = code;
       const link = /^https?:$/.test(location.protocol) && !inClaude() ? location.origin + location.pathname + '#' + code : '';
       $('netControls').hidden = true;
-      setNetStatus(`<div class="wait"><span class="code">${code}</span><span>Отправь код${link ? ' или ссылку' : ''} другу. Игра начнётся, как только он войдёт.</span>` +
+      lobbyAnnounce('open'); clearInterval(Net.lobbyBeat); Net.lobbyBeat = setInterval(() => lobbyAnnounce('open'), 20000);
+      setNetStatus(`<div class="wait"><span class="code">${code}</span><span>${cloudOn() ? 'Друзья увидят тебя в списке «Ждут соперника». Или отправь' : 'Отправь'} код${link ? ' или ссылку' : ''} другу. Игра начнётся, как только он войдёт.</span>` +
         `<span class="wait-actions">${link && navigator.share ? '<button class="btn accent" id="shareLink">Пригласить</button>' : ''}${link ? '<button class="btn soft" id="copyLink">Скопировать ссылку</button>' : ''}<button class="linkbtn" id="netCancel">Отменить</button></span></div>`);
       const shb = $('shareLink');
       if (shb) shb.addEventListener('click', () => { navigator.share({ title: 'Смэш мне в ногу', text: 'Залетай на партию в бадминтон! Код комнаты ' + code, url: link }).catch(() => {}); });
@@ -1729,7 +1784,7 @@ function netCallbacks() {
       Net.connected = true; Net.lastRecv = performance.now();
       clearTimeout(Net.joinTimer);
       startSync();
-      if (Net.role === 'host') startGame('online');
+      if (Net.role === 'host') { clearInterval(Net.lobbyBeat); lobbyRemove(Net.code); startGame('online'); }
       else setNetStatus('Соединились, ждём начала…');
     },
     onData(m) { Net.lastRecv = performance.now(); handleNet(m); },
@@ -1739,7 +1794,7 @@ function netCallbacks() {
       const msg = type === 'peer-unavailable' ? 'Комната не найдена. Проверь код: друг должен держать её открытой.'
         : type === 'browser-incompatible' ? 'Этот браузер не умеет WebRTC. Попробуй Chrome, Safari или Firefox.'
         : 'Не удалось подключиться к серверу соединений. Проверь интернет и попробуй ещё раз.';
-      netFail(msg);
+      netFail(msg + (document.body.classList.contains('touch') ? ' Если ссылка открыта внутри Telegram или Instagram, открой её в Safari или Chrome.' : ''));
     },
   };
 }
@@ -1761,6 +1816,8 @@ function netJoin() {
   Net.joinTimer = setTimeout(() => { if (!Net.connected && Net.role === 'guest') netFail('Не получилось соединиться за 15 секунд. Проверь код и попробуй ещё раз.'); }, 15000);
 }
 function netClose() {
+  clearInterval(Net.lobbyBeat);
+  if (Net.role === 'host' && Net.code) lobbyRemove(Net.code);
   if (Net.transport) { try { Net.send({ t: 'bye' }); } catch (_) {} Net.transport.close(); }
   clearTimeout(Net.joinTimer);
   if (Net.savedCfg) { Object.assign(cfg, Net.savedCfg); syncTune(); }
@@ -1810,6 +1867,7 @@ function onGuestInput(m) {
   p.axis = clamp(+m.ax || 0, -1, 1);
   if (m.sq > Net.lastShotSeq) { Net.lastShotSeq = m.sq; if (['clear', 'drop', 'smash'].includes(m.sk)) p.shotReq = m.sk; }
   if (m.ag > Net.lastAg) { Net.lastAg = m.ag; if (game.state === 'over') restart(); }
+  if (m.rq > Net.lastRq) { Net.lastRq = m.rq; if (m.ri >= 0 && m.ri < REACTS.length) fx('react', 1, m.ri | 0); }
   if (Number.isFinite(m.rtt) && m.rtt > 0) Net.remoteRtt = clamp(m.rtt, 0, 1);
   Net.lastTs = m.ts; Net.eventAck = Math.max(Net.eventAck, m.ea | 0);
 }
@@ -1818,7 +1876,7 @@ function onGuestInput(m) {
 function sendInput() {
   const me = P[Net.myIdx];
   Net.send({ t: 'in', n: ++Net.outN, x: r3(me.x), y: r3(me.y), vx: r2(me.vx), vy: r2(me.vy), g: me.onGround ? 1 : 0,
-    ep: Net.posEpoch, sq: Net.shotSeq, sk: Net.shotKey, ag: Net.againSeq, ea: Net.lastEv, ts: performance.now(), rtt: r3(Net.rtt), id: profile.pid, nm: profile.name, sy: profile.style, ax: me.axis });
+    ep: Net.posEpoch, sq: Net.shotSeq, sk: Net.shotKey, ag: Net.againSeq, rq: Net.reactSeq, ri: Net.reactI, ea: Net.lastEv, ts: performance.now(), rtt: r3(Net.rtt), id: profile.pid, nm: profile.name, sy: profile.style, ax: me.axis });
 }
 function guestAction(p, act) {
   if (act === 'jump') { p.jumpReq = 0.12; return; }
@@ -1897,6 +1955,7 @@ function applyFx(type, a) {
     case 'point': sndPoint(game.mode === '2p' || a[0] === localIdx()); break;
     case 'recover': if (Net.role === 'guest' && a[0] === Net.myIdx) P[a[0]].recover = a[1]; break;
     case 'match': addRecs([a[0]]); cloudSync(); break;
+    case 'react': if (REACTS[a[1]]) { game.bubbles = (game.bubbles || []).filter(b => b.idx !== a[0]); game.bubbles.push({ idx: a[0], text: REACTS[a[1]], t: 0 }); if (canSound()) tone(880, 1320, 0.06, 0.12, 'sine'); } break;
     case 'mark': game.mark = { x: a[0], out: !!a[1], text: String(a[2]).slice(0, 40), lineX: a[3], t: 0 }; break;
   }
 }
@@ -1917,6 +1976,8 @@ $('netCode').addEventListener('input', e => { const v = e.target.value.toUpperCa
 // ?p=2 — второй профиль в том же браузере, для проверки на одном компьютере
 const SLOT = (/[?&]p=(\d)\b/.exec(location.search) || [])[1] || '';
 const PID = /^[a-z0-9]{6,16}$/;
+const AVA_COLORS = ['#ff6a3d', '#3cc3e6', '#ffd78a', '#7be3a6', '#b79cff', '#ff8fb8', '#5ad1b0', '#f2a65a'];
+function pidColor(pid) { let h = 0; for (const ch of String(pid)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return AVA_COLORS[h % AVA_COLORS.length]; }
 function loadJSON(k, d) { k += SLOT; try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } }
 function saveJSON(k, v) { k += SLOT; try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
 function rid(n) { const a = 'abcdefghijkmnpqrstuvwxyz23456789'; let s = ''; for (let i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
@@ -1964,6 +2025,10 @@ function standings() {
   if (profile.name && !st[profile.pid] && store.best[profile.pid]) row(profile.pid);
   const rows = Object.values(st).map(x => ({ ...x, best: store.best[x.pid] || 0, name: (store.names[x.pid] && store.names[x.pid][0]) || (x.pid === profile.pid ? profile.name : 'Игрок') }));
   rows.sort((a, b) => b.w - a.w || (b.w - (b.n - b.w)) - (a.w - (a.n - a.w)) || b.aw - a.aw || a.name.localeCompare(b.name));
+  // одинаковые имена у разных игроков: «Саша», «Саша 2» — порядок по id одинаковый на всех устройствах
+  const groups = {};
+  for (const r of rows) (groups[r.name.toLowerCase()] = groups[r.name.toLowerCase()] || []).push(r);
+  for (const g of Object.values(groups)) if (g.length > 1) [...g].sort((a, b) => a.pid.localeCompare(b.pid)).forEach((r, i) => { if (i) r.name += ' ' + (i + 1); });
   return rows;
 }
 const CUP_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 3h10v1.6h3.2v2.6c0 2.3-1.7 4.2-3.9 4.5A5.2 5.2 0 0 1 13 14.6v2.2h3.4V19H7.6v-2.2H11v-2.2a5.2 5.2 0 0 1-3.3-2.9C5.5 11.4 3.8 9.5 3.8 7.2V4.6H7V3Zm-1.6 3.2v1c0 1.2.7 2.2 1.7 2.6A8 8 0 0 1 7 8.4V6.2H5.4Zm11.6 0v2.2c0 .5 0 .9-.1 1.4 1-.4 1.7-1.4 1.7-2.6v-1H17Z"/><rect x="6.6" y="19.8" width="10.8" height="1.8" rx=".9" fill="currentColor"/></svg>';
@@ -1981,7 +2046,9 @@ function renderStandings() {
     const td = (cls, txt) => { const c = document.createElement('td'); if (cls) c.className = cls; if (txt !== undefined) c.textContent = txt; tr.appendChild(c); return c; };
     const rk = td('rank l');
     if (cup) { rk.innerHTML = CUP_SVG; rk.title = place + '-е место'; } else rk.textContent = String(place);
-    const nm = td('name l', r.name);
+    const nm = td('name l');
+    const av = document.createElement('span'); av.className = 'av'; av.style.background = pidColor(r.pid); av.textContent = r.name.charAt(0).toUpperCase();
+    nm.append(av, document.createTextNode(r.name));
     if (r.pid === profile.pid) { const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'ты'; nm.appendChild(t); }
     const cell = (w, n) => {
       const c = td('wl');
@@ -2002,28 +2069,32 @@ function renderStandings() {
 function renderHello() {
   $('meName').textContent = profile.name || 'Без имени';
   $('meAva').textContent = (profile.name || '?').charAt(0).toUpperCase();
+  $('meAva').style.background = pidColor(profile.pid);
   const b = store.best[profile.pid], ra = store.rally[profile.pid];
   const parts = [b ? 'смэш ' + b + ' км/ч' : '', ra ? 'розыгрыш ' + ra + ' уд.' : ''].filter(Boolean);
   $('meBest').textContent = STYLES[profile.style].label + ' · ' + (parts.length ? parts.join(' · ') : 'рекордов пока нет');
 }
 const DIFF_NOTE = { easy: 'Медленный и часто ошибается. Для разминки', medium: 'Держит розыгрыш, но ошибается под давлением', hard: 'Быстрая реакция, редкие ошибки, любит смэш' };
 function renderDiffNote() { $('diffNote').textContent = DIFF_NOTE[game.diff]; }
-$('nameInput').addEventListener('input', e => { $('nameAva').textContent = (cleanName(e.target.value) || '?').charAt(0).toUpperCase(); });
+function nameTaken(n) { n = cleanName(n).toLowerCase(); return !!n && Object.entries(store.names).some(([pid, v]) => pid !== profile.pid && Array.isArray(v) && String(v[0]).toLowerCase() === n); }
+$('nameInput').addEventListener('input', e => { $('nameAva').textContent = (cleanName(e.target.value) || '?').charAt(0).toUpperCase(); $('nameWarn').hidden = !nameTaken(e.target.value); });
 let pickStyle = profile.style;
 function syncStyleSeg() { for (const o of document.querySelectorAll('#styleSeg button')) o.setAttribute('aria-checked', String(o.dataset.style === pickStyle)); }
 for (const o of document.querySelectorAll('#styleSeg button')) o.addEventListener('click', () => { pickStyle = o.dataset.style; syncStyleSeg(); });
-function openNameDlg() { pickStyle = profile.style; syncStyleSeg(); $('nameInput').value = profile.name || ''; $('nameAva').textContent = (profile.name || '?').charAt(0).toUpperCase(); $('nameDlg').hidden = false; setTimeout(() => $('nameInput').focus(), 30); }
+function openNameDlg() { pickStyle = profile.style; syncStyleSeg(); $('nameInput').value = profile.name || ''; $('nameAva').style.background = pidColor(profile.pid); $('nameWarn').hidden = true; $('nameAva').textContent = (profile.name || '?').charAt(0).toUpperCase(); $('nameDlg').hidden = false; setTimeout(() => $('nameInput').focus(), 30); }
 function needName() { if (profile.name) return false; openNameDlg(); return true; }
 $('nameForm').addEventListener('submit', e => {
   e.preventDefault();
   const n = cleanName($('nameInput').value);
   if (!n) { $('nameInput').focus(); return; }
+  const firstTime = !profile.name;
   profile.name = n; profile.style = STYLES[pickStyle] ? pickStyle : 'tech'; saveJSON('bdm-profile', profile);
   if (game.mode === '1p' || (game.mode === 'online' && Net.myIdx === 0 && Net.role === 'host')) P[localIdx()].style = profile.style;
   noteName(profile.pid, n, Date.now()); saveStore();
   $('nameDlg').hidden = true;
   renderHello(); renderStandings(); cloudSync();
   if (game.mode !== 'demo') { P[localIdx()].name = n; updateBoard(); }
+  if (firstTime) setTimeout(() => openRules(0), 220); // новичку сразу показываем, как играть
 });
 $('nameDlg').addEventListener('keydown', e => { if (e.key === 'Escape' && profile.name) $('nameDlg').hidden = true; });
 $('editName').addEventListener('click', openNameDlg);
@@ -2109,6 +2180,73 @@ async function cloudSync() {
 }
 setInterval(() => { if (!document.hidden && !$('menu').hidden) cloudSync(); }, 45000);
 
+
+
+/* ========= Лобби: открытые комнаты ========= */
+const LOBBY_TTL = 45000;
+async function lobbyAnnounce(status) {
+  if (!cloudOn() || !Net.code || Net.role !== 'host' || !profile.name) return;
+  try { await cloudReq('rooms?on_conflict=code', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify([{ code: Net.code, host_pid: profile.pid, host_name: profile.name, status, updated_at: new Date().toISOString() }]) }); } catch (_) {}
+}
+function lobbyRemove(code) {
+  if (!cloudOn() || !code) return;
+  try { fetch(CLOUD.url + '/rest/v1/rooms?code=eq.' + encodeURIComponent(code), { method: 'DELETE', keepalive: true, headers: { apikey: CLOUD.key } }).catch(() => {}); } catch (_) {}
+}
+async function lobbyRefresh() {
+  const box = $('lobby'); if (!box) return;
+  if (!cloudOn() || $('menu').hidden || document.hidden || Net.role) { if (Net.role === 'host' || !cloudOn()) box.hidden = true; return; }
+  try {
+    const since = new Date(Date.now() - LOBBY_TTL).toISOString();
+    const rows = await cloudReq('rooms?select=code,host_pid,host_name,updated_at&status=eq.open&updated_at=gt.' + encodeURIComponent(since) + '&order=updated_at.desc&limit=8');
+    renderLobby((rows || []).filter(r => r.host_pid !== profile.pid && /^[A-Z2-9]{4}$/.test(r.code)));
+  } catch (_) { box.hidden = true; }
+}
+function renderLobby(rows) {
+  const box = $('lobby'), list = $('lobbyList');
+  list.textContent = '';
+  box.hidden = !rows.length;
+  for (const r of rows.slice(0, 4)) {
+    const name = cleanName(r.host_name) || 'Игрок';
+    const b = document.createElement('button'); b.className = 'lobby-item'; b.type = 'button';
+    const av = document.createElement('span'); av.className = 'av'; av.style.background = pidColor(r.host_pid); av.textContent = name.charAt(0).toUpperCase();
+    const nm = document.createElement('span'); nm.className = 'ln'; nm.textContent = name;
+    const go = document.createElement('span'); go.className = 'go'; go.textContent = 'Играть';
+    b.append(av, nm, go);
+    b.addEventListener('click', () => { unlockAudio(); if (needName()) return; $('netCode').value = r.code; netJoin(); });
+    list.appendChild(b);
+  }
+}
+setInterval(lobbyRefresh, 5000);
+
+/* ========= Реакции в онлайне ========= */
+const REACTS = ['Смэш мне в ногу!', 'Ну ты даёшь', 'Реванш?', 'GG'];
+function sendReact(i) {
+  if (game.mode !== 'online' || !Net.connected || !(i >= 0 && i < REACTS.length)) return;
+  const now = performance.now(); if (now - Net.lastReact < 1200) return;
+  Net.lastReact = now;
+  if (Net.role === 'host') fx('react', Net.myIdx, i);
+  else { Net.reactSeq++; Net.reactI = i; Net.lastSend = now; sendInput(); }
+}
+for (const b of document.querySelectorAll('#reacts button')) b.addEventListener('click', () => { sendReact(+b.dataset.r); canvas.focus(); });
+function drawBubbles(c, dt) {
+  game.bubbles = (game.bubbles || []).filter(b => (b.t += dt) < 2.6);
+  for (const b of game.bubbles) {
+    const p = P[b.idx]; if (!p) continue;
+    const a = b.t < 0.15 ? b.t / 0.15 : b.t > 2.2 ? (2.6 - b.t) / 0.4 : 1;
+    c.save(); c.globalAlpha = Math.max(0, a);
+    c.font = `600 ${Math.max(12, sc * 0.24)}px ${FB}`;
+    const tw = c.measureText(b.text).width, padX = 12, hgt = Math.max(28, sc * 0.48);
+    const cx = X(p.x), cy = Y(p.y + 2.45) - (1 - Math.min(1, b.t / 0.2)) * 8;
+    const x = clamp(cx - tw / 2 - padX, 8, W - tw - padX * 2 - 8);
+    c.fillStyle = p.color;
+    roundRect(c, x, cy - hgt, tw + padX * 2, hgt, hgt / 2); c.fill();
+    c.beginPath(); c.moveTo(cx - 6, cy - 1); c.lineTo(cx + 6, cy - 1); c.lineTo(cx, cy + 8); c.closePath(); c.fill();
+    c.fillStyle = '#0b1215'; c.textAlign = 'left'; c.textBaseline = 'middle';
+    c.fillText(b.text, x + padX, cy - hgt / 2 + 1);
+    c.restore();
+  }
+}
 
 /* ========= Правила: шаги с анимацией =========
    Мини-корт рисуется отдельно, а траектории считает та же физика, что и в игре. */
@@ -2423,8 +2561,9 @@ window.addEventListener('resize', () => { if (!$('rules').hidden) rResize(); });
 let last = performance.now(), acc = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const rotBlocked = document.body.classList.contains('touch') && document.body.classList.contains('playing') && window.innerHeight > window.innerWidth;
   if (game.mode === 'online' && Net.role === 'guest') guestTick(dt);
-  else if (!game.paused && game.state !== 'over') {
+  else if (!game.paused && game.state !== 'over' && !(rotBlocked && game.mode !== 'online')) {
     if (game.hitstop > 0) game.hitstop -= dt;
     else {
       acc += dt * cfg.timeScale;
@@ -2439,7 +2578,7 @@ function frame(now) {
 
 // Для отладки и автотестов
 window.__bdm = {
-  game, P, sh, cfg, simulate, Net, store, profile, standings, CLOUD, cloudSync, STYLES, openRules, rShow,
+  game, P, sh, cfg, simulate, Net, store, profile, standings, CLOUD, cloudSync, STYLES, openRules, rShow, renderLobby, sendReact,
   fastForward(sec) { const n = Math.round(sec / H); for (let i = 0; i < n && game.state !== 'over'; i++) step(H); game.hitstop = 0; },
 };
 
@@ -2461,7 +2600,9 @@ function start(data) {
   if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен, нажми «Войти».'); }
   if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Внутри claude.ai браузер не даёт игрокам соединиться напрямую. Играй по сети на сайте: <a href="https://korolevdesgn-gif.github.io/badminton/" style="color: var(--ink)">korolevdesgn-gif.github.io/badminton</a>'); }
   window.addEventListener('beforeunload', () => { if (Net.role) netClose(); });
-  renderHello(); renderStandings(); renderDiffNote(); renderFoot(); cloudSync();
+  window.addEventListener('pagehide', () => { if (Net.role === 'host' && !Net.connected && Net.code) lobbyRemove(Net.code); });
+  renderHello(); renderStandings(); renderDiffNote(); renderFoot(); cloudSync(); lobbyRefresh();
+  if (/Instagram|FBAN|FBAV|FB_IAB|Line\/|VKClient|Telegram|; wv\)/i.test(navigator.userAgent)) $('inapp').hidden = false;
   if (!profile.name) openNameDlg();
   requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 }
