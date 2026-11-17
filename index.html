@@ -371,7 +371,7 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
             <div class="cap"><b>D</b><small>к сетке</small></div>
           </div>
           <p>Ниже плеча те же кнопки дают свечу, сетку и драйв.</p>
-          <p>Держи <kbd>A</kbd> при ударе — глубже, <kbd>D</kbd> — короче и острее. Смэш с <kbd>D</kbd> летит в ноги. <kbd>Esc</kbd> пауза</p>
+          <p>При ударе стрелка — прицел: <kbd>D</kbd> — дальше, под заднюю линию, <kbd>A</kbd> — ближе к сетке и острее. Смэш с <kbd>A</kbd> летит в ноги. <kbd>Esc</kbd> пауза</p>
         </div>
         <div class="about">
           <button class="btn soft block" id="openRules">Правила</button>
@@ -675,7 +675,8 @@ function doHit(p, key) {
   const weak = perfect ? 0 : clamp((0.62 - q) / 0.5, 0, 1);
   const short = weak * 2.6 + p.press * 0.9;
   // куда бить: держишь «назад» — глубже, «к сетке» — короче и острее
-  const place = p.ai ? (p.ai.place || 0) : Math.sign(p.axis * p.face);
+  // направление при ударе — это прицел: «от себя» (к задней линии соперника) — дальше, «к себе» — ближе к сетке
+  const place = p.ai ? (p.ai.place || 0) : -Math.sign(p.axis * p.face);
   const boost = perfect ? 1.08 : 1;
   // ИИ иногда ошибается сам: чаще на рискованных ударах и при плохом контакте
   const roll = Math.random();
@@ -2127,7 +2128,7 @@ const RULE_STEPS = [
   { t: 'Удары снизу', keys: ['Q', 'E', 'S'], demo: 'low',
     d: '<p>Если волан <b>ниже плеча</b>, те же кнопки дают другие удары: <kbd>Q</kbd> — свеча высоко назад, <kbd>E</kbd> — сетка или блок, <kbd>S</kbd> — драйв, плоско и быстро.</p><p>До низкого волана игрок тянется в выпаде сам.</p>' },
   { t: 'Куда бить', keys: ['A', 'D', 'Q', 'S', 'W'], demo: 'place',
-    d: '<p>Зажми направление в момент удара. <kbd>A</kbd> — глубже, под самую линию: опасно для соперника, но можно уйти в аут. <kbd>D</kbd> — короче и острее.</p><p>Смэш с зажатой <kbd>D</kbd> летит в ноги.</p>' },
+    d: '<p>В момент удара направление работает как прицел: волан летит туда, куда жмёшь. <kbd>D</kbd> — дальше, под самую заднюю линию: опасно для соперника, но можно уйти в аут. <kbd>A</kbd> — ближе к сетке, короче и острее.</p><p>Смэш с зажатой <kbd>A</kbd> летит в ноги.</p>' },
   { t: 'Чистый удар', keys: ['Q'], demo: 'perfect',
     d: '<p>Жми удар, когда волан в <b>лучшей точке</b> над плечом. Попал — «ЧИСТО»: удар быстрее, точнее и сильнее давит на соперника.</p><p>Нажал рано — контакт на краю досягаемости, ответ выйдет коротким, и его добьют.</p>' },
   { t: 'Выносливость и инициатива', keys: ['A', 'D', 'W', 'S'], demo: 'stamina',
@@ -2135,8 +2136,8 @@ const RULE_STEPS = [
   { t: 'Лайфхаки', keys: [], demo: null, d: '<ul class="rtips">' + [
       'После каждого удара возвращайся в центр своей половины: оттуда ближе и к сетке, и назад.',
       'Клир, потом дроп: соперник бегает туда-обратно и быстрее устаёт.',
-      'Короткий ответ соперника добивай прыжком и смэшем с зажатой <kbd>D</kbd> — в ноги.',
-      'Под давлением не рискуй: глубокая свеча (<kbd>A</kbd> + <kbd>Q</kbd>) даёт время прийти в себя.',
+      'Короткий ответ соперника добивай прыжком и смэшем с зажатой <kbd>A</kbd> — в ноги.',
+      'Под давлением не рискуй: глубокая свеча (<kbd>D</kbd> + <kbd>Q</kbd>) даёт время прийти в себя.',
       'Смотри на тень волана на полу: она показывает, куда он падает. Для тренировки включи в настройках ⚙ «Показывать, куда упадёт волан».',
       'ИИ бьёт смэш коротко, перед тобой, если ты стоишь сзади, и за спину, если ты у сетки. Держись в центре.',
       '«Техника» прощает неточный тайминг, «Атака» — для тех, кто любит заканчивать розыгрыш смэшем.',
@@ -2189,8 +2190,8 @@ function buildDemo(kind) {
       mkShot({ px: 4.4, cx: 5.05, cy: 0.5, lunge: true, low: true, shot: 'lift', key: 'Q', label: 'Свеча' }),
       mkShot({ px: 5.2, cx: 5.85, cy: 0.62, lunge: true, low: true, shot: 'net', key: 'E', label: 'Сетка' }) ] };
     case 'place': return { list: [
-      mkShot({ ...deep, shot: 'clearDeep', key: 'Q', hold: 'A', label: 'A + Q · глубокий клир', over: true, line: COURT }),
-      mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smashFeet', key: 'S', pre: 'W', hold: 'D', label: 'D + S · смэш в ноги', over: true }) ] };
+      mkShot({ ...deep, shot: 'clearDeep', key: 'Q', hold: 'D', label: 'D + Q · глубокий клир', over: true, line: COURT }),
+      mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smashFeet', key: 'S', pre: 'W', hold: 'A', label: 'A + S · смэш в ноги', over: true }) ] };
     case 'perfect': return { perfect: true, list: [
       mkShot({ ...deep, cx: deep.cx + 0.12, cy: deep.cy + 0.34, ring: { x: deep.cx, y: deep.cy }, shot: 'clearWeak', key: 'Q', label: 'Рано · короткий ответ', over: true, early: true }),
       mkShot({ ...deep, shot: 'clearPerfect', key: 'Q', label: 'ЧИСТО', over: true, sweet: true }) ] };
