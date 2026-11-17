@@ -1547,7 +1547,7 @@ function start(data) {
   setupMode('demo');
   const hm = /^#([A-Za-z0-9]{4})$/.exec(location.hash);
   if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен. Нажми «Войти».'); }
-  if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Онлайн работает в версии-файле игры: внутри claude.ai браузер не даёт игрокам соединиться напрямую. Скачай файл из чата, открой в браузере и отправь тот же файл другу.'); }
+  if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Онлайн работает на сайте игры: korolevdesgn-gif.github.io/badminton. Внутри claude.ai браузер не даёт игрокам соединиться напрямую.'); }
   window.addEventListener('beforeunload', () => { if (Net.role) netClose(); });
   requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 }
