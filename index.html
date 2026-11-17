@@ -155,12 +155,12 @@ body.menu-open #board .init { display: none; }
 .lb .empty { margin: 2px 0 4px; font-size: 13px; color: var(--muted); }
 .lb .empty[hidden] { display: none; }
 .lb .foot { margin: 2px 0 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
-.side { padding: 20px; display: grid; gap: 16px; align-content: start; --accent: var(--p1); }
-.side p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
-.side .keys { display: grid; gap: 12px; }
-.side .about { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid var(--edge); }
-.side .about p b { color: var(--ink); font-weight: 600; }
-body.touch .side .about { padding-top: 0; border-top: 0; }
+.sidepanel { padding: 20px; display: grid; gap: 16px; align-content: start; --accent: var(--p1); }
+.sidepanel p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.sidepanel .keys { display: grid; gap: 12px; }
+.sidepanel .about { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid var(--edge); }
+.sidepanel .about p b { color: var(--ink); font-weight: 600; }
+body.touch .sidepanel .about { padding-top: 0; border-top: 0; }
 .caps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .cap { height: 50px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; }
 .cap b { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
@@ -186,6 +186,39 @@ body.touch .side .about { padding-top: 0; border-top: 0; }
 .card .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .card .row .btn { flex: 1 1 140px; }
 #pause, #over, #netlost { background: rgba(8, 13, 15, 0.8); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+
+/* Правила */
+#rules { z-index: 13; background: rgba(8, 13, 15, 0.82); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.rules-card { width: min(720px, 100%); padding: 18px 20px 20px; border-radius: 22px; background: var(--surface); border: 1px solid var(--edge); display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
+.rules-top { display: flex; justify-content: space-between; align-items: center; }
+.rstep { font: 700 12px var(--font-display); letter-spacing: 0.12em; color: var(--lamp); }
+.rclose { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--edge); background: transparent; color: var(--muted); }
+.rclose:hover { color: var(--ink); }
+.rdemo { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--edge); background: #0a1113; }
+.rdemo[hidden] { display: none; }
+#rCanvas { display: block; width: 100%; aspect-ratio: 2.1 / 1; }
+.rkeys { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; }
+.rk { min-width: 46px; height: 44px; padding: 0 8px; border-radius: 9px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; transition: transform 0.08s, background 0.08s, box-shadow 0.08s; }
+.rk b { font: 700 14px var(--font-display); }
+.rk small { font-size: 9.5px; color: var(--muted); }
+.rk.on { background: var(--p1); border-bottom-color: #8a2f12; transform: translateY(2px); box-shadow: 0 0 18px rgba(255, 106, 61, 0.55); }
+.rk.on b, .rk.on small { color: var(--p1-ink); }
+.rk.hold { background: #2a3a3b; box-shadow: inset 0 0 0 1px var(--lamp); }
+.rules-card h2 { margin: 0; font: 700 22px var(--font-display); letter-spacing: -0.01em; }
+.rtext { color: var(--muted); font-size: 15px; line-height: 1.55; display: grid; gap: 8px; min-height: 4.6em; }
+.rtext p { margin: 0; }
+.rtext b { color: var(--ink); font-weight: 600; }
+.rtext kbd { font-size: 11px; }
+.rtips { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.rtips li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; color: var(--ink); font-size: 14.5px; line-height: 1.5; }
+.rtips li span { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: rgba(255, 215, 138, 0.12); color: var(--lamp); font: 700 12px var(--font-display); }
+.rnav { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.rnav .btn { padding: 11px 18px; }
+.rnav .btn:disabled { opacity: 0.35; cursor: default; }
+.rdots { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.rdots button { width: 8px; height: 8px; padding: 0; border-radius: 50%; border: 0; background: rgba(232, 239, 233, 0.2); }
+.rdots button[aria-current="true"] { background: var(--lamp); width: 20px; border-radius: 4px; }
+@media (max-width: 560px) { .rk { min-width: 40px; height: 40px; } .rtext { font-size: 14px; } }
 
 /* Панель настройки */
 #tune { position: fixed; top: 62px; right: 14px; width: 290px; max-height: calc(100% - 80px); overflow: auto; padding: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--edge); z-index: 7; display: grid; gap: 14px; }
@@ -326,7 +359,7 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
         </section>
       </div>
 
-      <aside class="side panel" aria-label="Управление и об игре">
+      <aside class="sidepanel panel" aria-label="Управление и об игре">
         <div class="keys only-keys">
           <h2 class="panel-title">Управление</h2>
           <div class="caps">
@@ -341,10 +374,8 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
           <p>Держи <kbd>A</kbd> при ударе — глубже, <kbd>D</kbd> — короче и острее. Смэш с <kbd>D</kbd> летит в ноги. <kbd>Esc</kbd> пауза</p>
         </div>
         <div class="about">
-          <h2 class="panel-title">Об игре</h2>
-          <p>Бей в момент, когда волан в лучшей точке, и получишь <b>чистый удар</b>: быстрее и точнее. Поспешил — ответ выйдет коротким.</p>
-          <p>Бег и смэши тратят <b>выносливость</b> (полоска под игроком). Атакуй, чтобы забрать <b>инициативу</b> (полоска под счётом): под давлением соперник бьёт слабее.</p>
-          <p>Партия до <b>15</b>, нужен отрыв в два очка.</p>
+          <button class="btn soft block" id="openRules">Правила</button>
+          <p>11 коротких шагов: каждый удар с анимацией, а в конце лайфхаки</p>
         </div>
       </aside>
     </div>
@@ -367,11 +398,32 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
   </form>
 </section>
 
+<section class="overlay" id="rules" hidden aria-label="Правила">
+  <div class="rules-card" role="dialog" aria-labelledby="rTitle">
+    <div class="rules-top">
+      <span class="rstep" id="rStep">1 / 11</span>
+      <button class="rclose" id="rClose" aria-label="Закрыть правила">✕</button>
+    </div>
+    <div class="rdemo" id="rDemo">
+      <canvas id="rCanvas" aria-hidden="true"></canvas>
+      <div class="rkeys" id="rKeys"></div>
+    </div>
+    <h2 id="rTitle"></h2>
+    <div class="rtext" id="rText"></div>
+    <div class="rnav">
+      <button class="btn" id="rPrev">Назад</button>
+      <div class="rdots" id="rDots"></div>
+      <button class="btn primary" id="rNext">Далее</button>
+    </div>
+  </div>
+</section>
+
 <section class="overlay" id="pause" hidden aria-label="Пауза">
   <div class="card">
     <h2>Пауза</h2>
     <div class="row">
       <button class="btn primary" id="resume">Продолжить</button>
+      <button class="btn" id="pauseRules">Правила</button>
       <button class="btn" id="toMenu1">В меню</button>
     </div>
   </div>
@@ -1026,6 +1078,7 @@ function humanAction(p, act) {
 
 window.addEventListener('keydown', e => {
   if (e.target && e.target.tagName === 'INPUT') return;
+  if (!$('rules').hidden) return;
   unlockAudio();
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   const inGame = game.mode !== 'demo' && $('menu').hidden;
@@ -2055,6 +2108,316 @@ async function cloudSync() {
 }
 setInterval(() => { if (!document.hidden && !$('menu').hidden) cloudSync(); }, 45000);
 
+
+/* ========= Правила: шаги с анимацией =========
+   Мини-корт рисуется отдельно, а траектории считает та же физика, что и в игре. */
+const RULE_STEPS = [
+  { t: 'Как выиграть очко', keys: [], demo: 'score',
+    d: '<p>Очко получает тот, на чьей стороне волан <b>не упал</b>: он приземлился у соперника в корте, или соперник ошибся — аут, сетка, не долетело.</p><p>Партия до <b>15</b>. При 14:14 нужен отрыв в два очка, но не дольше чем до 21. Подаёт тот, кто выиграл прошлое очко.</p>' },
+  { t: 'Бег и прыжок', keys: ['A', 'D', 'W'], demo: 'move',
+    d: '<p><kbd>A</kbd> — назад, <kbd>D</kbd> — к сетке, <kbd>W</kbd> — прыжок. Прыжок поднимает точку удара, поэтому смэш из прыжка круче и быстрее.</p><p>Против ИИ можно играть и стрелками.</p>' },
+  { t: 'Подача', keys: ['Q', 'E', 'S'], demo: 'serve',
+    d: '<p><kbd>Q</kbd> — высокая подача под заднюю линию, <kbd>E</kbd> — короткая через сетку, <kbd>S</kbd> — флик: низко и быстро.</p><p>Короткая подача должна перелететь переднюю линию подачи, иначе очко сопернику.</p>' },
+  { t: 'Клир', keys: ['Q'], demo: 'clear',
+    d: '<p><kbd>Q</kbd> над головой — высокий удар под заднюю линию соперника. Даёт тебе время вернуться в центр, а соперника заставляет бежать назад.</p>' },
+  { t: 'Дроп', keys: ['E'], demo: 'drop',
+    d: '<p><kbd>E</kbd> над головой — мягкий удар, который падает сразу за сеткой. Лучше всего работает, когда соперник стоит сзади после твоего клира.</p>' },
+  { t: 'Смэш', keys: ['W', 'S'], demo: 'smash',
+    d: '<p><kbd>S</kbd> — быстрый удар вниз. С прыжком (<kbd>W</kbd>, затем <kbd>S</kbd>) смэш круче и быстрее.</p><p>Сильнее всего смэш из середины корта: с задней линии волан успевает затормозить.</p>' },
+  { t: 'Удары снизу', keys: ['Q', 'E', 'S'], demo: 'low',
+    d: '<p>Если волан <b>ниже плеча</b>, те же кнопки дают другие удары: <kbd>Q</kbd> — свеча высоко назад, <kbd>E</kbd> — сетка или блок, <kbd>S</kbd> — драйв, плоско и быстро.</p><p>До низкого волана игрок тянется в выпаде сам.</p>' },
+  { t: 'Куда бить', keys: ['A', 'D', 'Q', 'S', 'W'], demo: 'place',
+    d: '<p>Зажми направление в момент удара. <kbd>A</kbd> — глубже, под самую линию: опасно для соперника, но можно уйти в аут. <kbd>D</kbd> — короче и острее.</p><p>Смэш с зажатой <kbd>D</kbd> летит в ноги.</p>' },
+  { t: 'Чистый удар', keys: ['Q'], demo: 'perfect',
+    d: '<p>Жми удар, когда волан в <b>лучшей точке</b> над плечом. Попал — «ЧИСТО»: удар быстрее, точнее и сильнее давит на соперника.</p><p>Нажал рано — контакт на краю досягаемости, ответ выйдет коротким, и его добьют.</p>' },
+  { t: 'Выносливость и инициатива', keys: ['A', 'D', 'W', 'S'], demo: 'stamina',
+    d: '<p>Полоска под ногами — <b>выносливость</b>. Бег, прыжки и смэши её тратят, а стоя и между очками она восстанавливается. Уставший бегает медленнее и чаще мажет.</p><p>Полоска под счётом — <b>инициатива</b>. Смэши и острые удары давят на соперника, под давлением его ответы слабее.</p>' },
+  { t: 'Лайфхаки', keys: [], demo: null, d: '<ul class="rtips">' + [
+      'После каждого удара возвращайся в центр своей половины: оттуда ближе и к сетке, и назад.',
+      'Клир, потом дроп: соперник бегает туда-обратно и быстрее устаёт.',
+      'Короткий ответ соперника добивай прыжком и смэшем с зажатой <kbd>D</kbd> — в ноги.',
+      'Под давлением не рискуй: глубокая свеча (<kbd>A</kbd> + <kbd>Q</kbd>) даёт время прийти в себя.',
+      'Смотри на тень волана на полу: она показывает, куда он падает. Для тренировки включи в настройках ⚙ «Показывать, куда упадёт волан».',
+      'ИИ бьёт смэш коротко, перед тобой, если ты стоишь сзади, и за спину, если ты у сетки. Держись в центре.',
+      '«Техника» прощает неточный тайминг, «Атака» — для тех, кто любит заканчивать розыгрыш смэшем.',
+    ].map((x, i) => '<li><span>' + (i + 1) + '</span><div>' + x + '</div></li>').join('') + '</ul>' },
+];
+const KEY_INFO = { Q: ['Q', 'клир', 'Клир'], E: ['E', 'дроп', 'Дроп'], S: ['S', 'смэш', 'Смэш'], A: ['A', 'назад', '◀'], D: ['D', 'к сетке', '▶'], W: ['W', 'прыжок', 'Прыжок'] };
+const rs_ = { i: 0, t0: 0, raf: 0, demo: null, keysOn: '' };
+const rc = $('rCanvas'), rcx = rc.getContext('2d');
+let rW = 0, rH = 0, rS = 30, rOx = 0, rFloor = 0, rDpr = 1;
+const RX = x => rOx + x * rS, RY = y => rFloor - y * rS;
+function rResize() {
+  const b = rc.getBoundingClientRect(); if (!b.width) return;
+  rDpr = Math.min(2, window.devicePixelRatio || 1);
+  rW = b.width; rH = b.height; rc.width = Math.round(rW * rDpr); rc.height = Math.round(rH * rDpr);
+  rS = Math.min(rW / 15.8, rH / 7.9); rOx = (rW - 15.8 * rS) / 2 + 1.2 * rS; rFloor = rH - 0.62 * rS;
+}
+// Траектория удара из точки контакта той же физикой, что в игре
+function rShot(kind, cx, cy) {
+  const T = d => NET + d;
+  let sol;
+  switch (kind) {
+    case 'clear': sol = solveFixed(cx, cy, 1, T(6.0), [36, 32, 28, 24], 85); break;
+    case 'clearDeep': sol = solveFixed(cx, cy, 1, T(6.45), [36, 32, 28, 24], 85); break;
+    case 'clearWeak': sol = solveFixed(cx, cy, 1, T(3.6), [40, 36, 32], 85); break;
+    case 'clearPerfect': sol = solveFixed(cx, cy, 1, T(6.1), [32, 28, 24], 92); break;
+    case 'drop': sol = solveFlat(cx, cy, 1, T(1.3), 30, 0.14, -40, 65); break;
+    case 'smash': sol = solveAngle(cx, cy, 1, T(3.6), 62, 0.04); break;
+    case 'smashFeet': sol = solveAngle(cx, cy, 1, T(2.4), 64, 0.04); break;
+    case 'lift': sol = solveFixed(cx, cy, 1, T(5.9), [58, 52, 46, 40, 64, 70, 76], 80); break;
+    case 'net': sol = solveFlat(cx, cy, 1, T(0.5), 12, 0.03, -10, 85); break;
+    case 'serveHigh': sol = solveFixed(cx, cy, 1, T(6.35), [64, 60, 56, 52, 48], 75); break;
+    case 'serveShort': sol = solveFlat(cx, cy, 1, T(SHORT + 0.3), 11, 0.06, -10, 75); break;
+  }
+  sol = sol || { ang: 45 * DEG, speed: 20 };
+  const res = simulate(cx, cy, Math.cos(sol.ang) * sol.speed, Math.sin(sol.ang) * sol.speed, true);
+  return { pts: res.pts, flight: res.t, land: res.landX, kmh: Math.round(sol.speed * 3.6) };
+}
+// Сценарий одного удара: подлёт, замах, полёт, приземление
+function mkShot(o) {
+  const tr = rShot(o.shot, o.cx, o.cy);
+  return { ...o, ...tr, hit: o.hit || 1.05, total: (o.hit || 1.05) + tr.flight / 0.8 + 1.2 };
+}
+function buildDemo(kind) {
+  const deep = { px: 1.25, cx: 1.55, cy: 2.35 };
+  switch (kind) {
+    case 'clear': return { list: [mkShot({ ...deep, shot: 'clear', key: 'Q', label: 'Клир', over: true })] };
+    case 'drop': return { list: [mkShot({ ...deep, shot: 'drop', key: 'E', label: 'Дроп', over: true })] };
+    case 'smash': return { list: [mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smash', key: 'S', pre: 'W', label: 'Смэш в прыжке', over: true })] };
+    case 'low': return { list: [
+      mkShot({ px: 4.4, cx: 5.05, cy: 0.5, lunge: true, low: true, shot: 'lift', key: 'Q', label: 'Свеча' }),
+      mkShot({ px: 5.2, cx: 5.85, cy: 0.62, lunge: true, low: true, shot: 'net', key: 'E', label: 'Сетка' }) ] };
+    case 'place': return { list: [
+      mkShot({ ...deep, shot: 'clearDeep', key: 'Q', hold: 'A', label: 'A + Q · глубокий клир', over: true, line: COURT }),
+      mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smashFeet', key: 'S', pre: 'W', hold: 'D', label: 'D + S · смэш в ноги', over: true }) ] };
+    case 'perfect': return { perfect: true, list: [
+      mkShot({ ...deep, cx: deep.cx + 0.12, cy: deep.cy + 0.34, ring: { x: deep.cx, y: deep.cy }, shot: 'clearWeak', key: 'Q', label: 'Рано · короткий ответ', over: true, early: true }),
+      mkShot({ ...deep, shot: 'clearPerfect', key: 'Q', label: 'ЧИСТО', over: true, sweet: true }) ] };
+    case 'serve': return { list: [
+      mkShot({ px: NET - SHORT - 1.25, cx: NET - SHORT - 0.83, cy: 0.95, serve: true, shot: 'serveHigh', key: 'Q', label: 'Высокая подача', hit: 0.8 }),
+      mkShot({ px: NET - SHORT - 1.25, cx: NET - SHORT - 0.83, cy: 0.95, serve: true, shot: 'serveShort', key: 'E', label: 'Короткая подача', hit: 0.8 }) ] };
+    case 'score': return { score: true, list: [mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smash', key: 'S', pre: 'W', label: 'Смэш', over: true })] };
+    case 'move': return { move: true, total: 3.6 };
+    case 'stamina': return { stamina: true, total: 5.4, smash: mkShot({ px: 3.1, cx: 3.4, cy: 2.95, jump: true, shot: 'smash', key: 'S', pre: 'W', label: 'Смэш', over: true, hit: 2.9 }) };
+  }
+  return null;
+}
+function rDrawBase(c) {
+  const g = c.createLinearGradient(0, 0, 0, rH); g.addColorStop(0, '#0a1113'); g.addColorStop(1, '#101c1b');
+  c.fillStyle = g; c.fillRect(0, 0, rW, rH);
+  c.fillStyle = '#141d1c'; c.fillRect(0, RY(0), rW, rH - RY(0));
+  c.fillStyle = '#1b6a4e'; c.fillRect(RX(-0.5), RY(0), (COURT + 1) * rS, 0.36 * rS);
+  c.fillStyle = COLORS.line;
+  for (const x of [0, DBL_LONG, NET - SHORT, NET + SHORT, COURT - DBL_LONG, COURT]) c.fillRect(RX(x) - 1, RY(0), 2, 0.36 * rS);
+  c.fillStyle = 'rgba(220,232,226,0.14)'; c.fillRect(RX(NET) - 2, RY(NET_H), 4, (NET_H - NET_LOW) * rS);
+  c.strokeStyle = '#5c6766'; c.lineWidth = 2; c.beginPath(); c.moveTo(RX(NET), RY(0) + 0.2 * rS); c.lineTo(RX(NET), RY(POST_H)); c.stroke();
+  c.strokeStyle = COLORS.line; c.lineWidth = 2.5; c.beginPath(); c.moveTo(RX(NET) - 3, RY(NET_H)); c.lineTo(RX(NET) + 3, RY(NET_H)); c.stroke();
+}
+function rDrawPlayer(c, x, y, arm, o = {}) {
+  const col = o.color || COLORS.p1, a = o.alpha ?? 1, ln = o.lunge || 0, f = o.face || 1;
+  c.save(); c.globalAlpha = a; c.lineCap = 'round'; c.lineJoin = 'round';
+  const hip = { x: x + f * ln * 0.22, y: y + HIP - ln * 0.36 }, sho = { x: hip.x + f * (0.05 + ln * 0.08), y: hip.y + 0.5 };
+  const th = Math.max(3, rS * 0.17);
+  const shade = shadeColor(col, -0.35);
+  c.fillStyle = 'rgba(0,0,0,0.35)'; c.beginPath(); c.ellipse(RX(x), RY(0) + 2, rS * 0.38, rS * 0.07, 0, 0, Math.PI * 2); c.fill();
+  c.strokeStyle = shade; c.lineWidth = th * 0.72;
+  const feet = y > 0.05 ? [[x + f * 0.16, y + 0.28], [x - f * 0.2, y + 0.2]] : [[x + f * (0.22 + ln * 0.55), 0], [x - f * (0.2 + ln * 0.15), 0]];
+  for (const [fx2, fy] of feet) { const kx = (hip.x + fx2) / 2 + f * 0.1, ky = (hip.y + fy) / 2 + (y > 0.05 ? 0.05 : 0); c.beginPath(); c.moveTo(RX(hip.x), RY(hip.y)); c.lineTo(RX(kx), RY(ky)); c.lineTo(RX(fx2), RY(fy)); c.stroke(); }
+  c.strokeStyle = col; c.lineWidth = th; c.beginPath(); c.moveTo(RX(hip.x), RY(hip.y)); c.lineTo(RX(sho.x), RY(sho.y)); c.stroke();
+  c.fillStyle = shadeColor(col, 0.35); c.beginPath(); c.arc(RX(sho.x + f * 0.04), RY(sho.y + 0.22), rS * 0.13, 0, Math.PI * 2); c.fill();
+  const an = arm * DEG, dx = Math.cos(an) * f, dy = Math.sin(an);
+  const hx = sho.x + dx * 0.56, hy = sho.y + dy * 0.56;
+  c.strokeStyle = col; c.lineWidth = th * 0.55; c.beginPath(); c.moveTo(RX(sho.x), RY(sho.y)); c.lineTo(RX(hx), RY(hy)); c.stroke();
+  c.strokeStyle = '#cfd8d3'; c.lineWidth = Math.max(1.2, rS * 0.03); c.beginPath(); c.moveTo(RX(hx), RY(hy)); c.lineTo(RX(hx + dx * 0.36), RY(hy + dy * 0.36)); c.stroke();
+  c.save(); c.translate(RX(hx + dx * 0.55), RY(hy + dy * 0.55)); c.rotate(Math.atan2(-dy, dx));
+  c.beginPath(); c.ellipse(0, 0, rS * 0.17, rS * 0.11, 0, 0, Math.PI * 2); c.strokeStyle = '#e8efe9'; c.lineWidth = Math.max(1.4, rS * 0.035); c.stroke(); c.restore();
+  if (o.sta !== undefined) {
+    const w = rS * 0.8, bx = RX(x) - w / 2, by = RY(0) + rS * 0.16, hh = Math.max(3, rS * 0.055);
+    c.fillStyle = 'rgba(232,239,233,0.12)'; roundRect(c, bx, by, w, hh, hh / 2); c.fill();
+    c.fillStyle = o.sta > 0.5 ? '#7be3a6' : o.sta > 0.25 ? COLORS.lamp : '#ff7a6a'; roundRect(c, bx, by, Math.max(hh, w * o.sta), hh, hh / 2); c.fill();
+  }
+  c.restore();
+}
+function rDrawShuttle(c, x, y, ang) {
+  const s = Math.max(1, rS / 55);
+  c.save(); c.translate(RX(x), RY(y)); c.rotate(-ang);
+  c.fillStyle = 'rgba(240,244,240,0.9)'; c.beginPath(); c.moveTo(-3 * s, -3 * s); c.lineTo(-15 * s, -7 * s); c.lineTo(-15 * s, 7 * s); c.lineTo(-3 * s, 3 * s); c.closePath(); c.fill();
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(0, 0, 3.6 * s, 0, Math.PI * 2); c.fill(); c.restore();
+}
+function rLabel(c, text, x, y, col, size = 0.26) {
+  c.font = `700 ${Math.max(11, rS * size)}px ${FD}`; c.textAlign = 'center'; c.fillStyle = col; c.fillText(text.toUpperCase(), RX(x), RY(y));
+}
+function swingArm(u, over) {
+  if (u <= 0) return over ? 140 : -150;
+  if (u >= 1) return null;
+  return over ? (u < 0.33 ? lerp(140, 72, ease(u / 0.33)) : lerp(72, -55, ease((u - 0.33) / 0.67))) : (u < 0.33 ? lerp(-150, -25, ease(u / 0.33)) : lerp(-25, 60, ease((u - 0.33) / 0.67)));
+}
+// Кадр одного удара; возвращает нажатые клавиши
+function rShotFrame(c, sd, t, extra = {}) {
+  const keys = new Set();
+  const H0 = sd.hit, inPress = t >= H0 - 0.12 && t <= H0 + 0.22;
+  if (inPress) keys.add(sd.key);
+  if (sd.hold && t >= H0 - 0.5 && t <= H0 + 0.22) keys.add(sd.hold + ':hold');
+  if (sd.pre && t >= H0 - 0.45 && t <= H0 - 0.3) keys.add(sd.pre);
+  // игрок
+  let py = 0, ln = 0;
+  if (sd.jump) { const k = (t - H0) / 0.37; py = Math.abs(k) < 1 ? 0.62 * (1 - k * k) : 0; }
+  if (sd.lunge) ln = t < H0 - 0.45 ? 0 : t < H0 ? ease((t - (H0 - 0.45)) / 0.45) : t < H0 + 0.6 ? 1 : Math.max(0, 1 - (t - H0 - 0.6) / 0.4);
+  const px = sd.lunge ? sd.px : sd.px;
+  let arm = swingArm((t - (H0 - 0.1)) / 0.36, !!sd.over);
+  if (arm === null || t < H0 - 0.1) arm = sd.low ? -60 : sd.serve ? -70 : 112;
+  rDrawPlayer(c, px, py, arm, { lunge: ln, sta: extra.sta });
+  // соперник-призрак
+  rDrawPlayer(c, NET + 3.3 + (extra.oppShift || 0), 0, 108, { color: COLORS.p2, alpha: 0.35, face: -1 });
+  // зона чистого удара
+  if (sd.sweet || sd.early) {
+    const pulse = 0.5 + 0.5 * Math.sin(t * 8);
+    c.strokeStyle = `rgba(255,215,138,${0.35 + 0.35 * pulse})`; c.lineWidth = 2; c.setLineDash([4, 4]);
+    const rg = sd.ring || { x: sd.cx, y: sd.cy };
+    c.beginPath(); c.arc(RX(rg.x), RY(rg.y), rS * 0.24, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+    if (t >= H0 && t - H0 < 0.5 && sd.sweet) { c.strokeStyle = `rgba(255,215,138,${1 - (t - H0) / 0.5})`; c.lineWidth = 3; c.beginPath(); c.arc(RX(rg.x), RY(rg.y), rS * (0.24 + (t - H0) * 1.2), 0, Math.PI * 2); c.stroke(); }
+  }
+  // волан до удара
+  if (t < H0) {
+    if (sd.serve) rDrawShuttle(c, sd.cx, sd.cy, -Math.PI / 2);
+    else {
+      const k = clamp(t / H0, 0, 1);
+      const sx = sd.low ? sd.cx + 2.6 * (1 - k) : sd.cx + 0.25 * (1 - k), sy = sd.low ? sd.cy + 1.4 * (1 - k) * (1 - k) + 1.2 * (1 - k) * k * 0.6 : sd.cy + 2.8 * (1 - ease(k));
+      rDrawShuttle(c, sx, sy, sd.low ? Math.PI * 1.15 : -Math.PI / 2);
+    }
+    return keys;
+  }
+  // полёт по настоящей траектории
+  const g = (t - H0) * 0.8, idx = Math.min(sd.pts.length - 1, Math.floor(g * 120));
+  c.strokeStyle = 'rgba(255,215,138,0.5)'; c.lineWidth = 2; c.beginPath();
+  for (let i = 0; i <= idx; i += 2) { const q = sd.pts[i]; i ? c.lineTo(RX(q.x), RY(q.y)) : c.moveTo(RX(q.x), RY(q.y)); }
+  c.stroke();
+  if (t - H0 < 0.8) rLabel(c, sd.label + (sd.shot.startsWith('smash') ? ' · ' + sd.kmh + ' км/ч' : ''), sd.cx + 0.6, sd.cy + 0.75, sd.sweet ? COLORS.lamp : sd.early ? '#ff9a7a' : COLORS.p1, 0.24);
+  if (g < sd.flight) {
+    const q = sd.pts[idx], q0 = sd.pts[Math.max(0, idx - 2)];
+    rDrawShuttle(c, q.x, q.y, Math.atan2(q.y - q0.y, q.x - q0.x));
+  } else {
+    const inC = sd.land <= COURT && sd.land > NET;
+    c.strokeStyle = inC ? '#7be3a6' : '#ff7a6a'; c.lineWidth = 2;
+    c.beginPath(); c.ellipse(RX(sd.land), RY(0) + 0.1 * rS, rS * 0.2, rS * 0.07, 0, 0, Math.PI * 2); c.stroke();
+    if (sd.line) { c.fillStyle = '#7be3a6'; c.fillRect(RX(sd.line) - 2, RY(0), 4, 0.36 * rS); }
+    rDrawShuttle(c, sd.land, 0.03, 0);
+  }
+  return keys;
+}
+function rFrame(now) {
+  if ($('rules').hidden) return;
+  rs_.raf = requestAnimationFrame(rFrame);
+  const st = RULE_STEPS[rs_.i], dm = rs_.demo;
+  if (!dm) return;
+  if (!rW) rResize();
+  const c = rcx; c.setTransform(rDpr, 0, 0, rDpr, 0, 0);
+  rDrawBase(c);
+  let t = (now - rs_.t0) / 1000, keys = new Set();
+  if (dm.list) {
+    const tot = dm.list.reduce((a, b) => a + b.total, 0);
+    let tt = t % tot, k = 0;
+    while (tt > dm.list[k].total) { tt -= dm.list[k].total; k++; }
+    const sd = dm.list[k];
+    keys = rShotFrame(c, sd, tt);
+    if (dm.score) {
+      const after = tt > sd.hit + sd.flight / 0.8;
+      c.fillStyle = 'rgba(5,9,10,0.85)'; roundRect(c, rW / 2 - rS * 2, rS * 0.3, rS * 4, rS * 1.1, 10); c.fill();
+      c.textAlign = 'center'; c.font = `900 ${rS * 0.5}px ${FD}`;
+      c.fillStyle = COLORS.p1; c.fillText(after ? '15' : '14', rW / 2 - rS * 0.75, rS * 1.0);
+      c.fillStyle = COLORS.muted; c.fillText(':', rW / 2, rS * 1.0);
+      c.fillStyle = COLORS.p2; c.fillText('12', rW / 2 + rS * 0.75, rS * 1.0);
+      c.font = `700 ${Math.max(10, rS * 0.18)}px ${FD}`; c.fillStyle = COLORS.lamp;
+      c.fillText(after ? 'ПАРТИЯ' : 'ГЕЙМБОЛ', rW / 2, rS * 1.32);
+      if (after) rLabel(c, 'В корте · очко', sd.land, 0.7, '#7be3a6', 0.24);
+    }
+  } else if (dm.move) {
+    const tt = t % dm.total;
+    let x = 2.2, y = 0;
+    if (tt < 1.0) { x = lerp(2.2, 4.9, ease(tt / 1.0)); keys.add('D'); }
+    else if (tt < 1.2) x = 4.9;
+    else if (tt < 2.2) { x = lerp(4.9, 2.2, ease((tt - 1.2) / 1.0)); keys.add('A'); }
+    else if (tt < 2.4) x = 2.2;
+    else if (tt < 3.15) { const k = (tt - 2.4) / 0.75; y = 0.62 * 4 * k * (1 - k); if (tt < 2.6) keys.add('W'); }
+    rDrawPlayer(c, x, y, 110);
+    rDrawPlayer(c, NET + 3.3, 0, 108, { color: COLORS.p2, alpha: 0.35, face: -1 });
+  } else if (dm.stamina) {
+    const tt = t % dm.total;
+    let x = 2.6, sta;
+    if (tt < 2.5) { const ph = tt / 2.5; x = 2.6 + Math.sin(ph * Math.PI * 4) * 1.5; keys.add(Math.cos(ph * Math.PI * 4) > 0 ? 'D' : 'A'); sta = 1 - ph * 0.72; }
+    else sta = 0.28;
+    if (tt >= 2.5 && tt < dm.smash.total + 0.2) {
+      keys = rShotFrame(c, dm.smash, tt - 0.3, { sta: tt > 2.9 ? Math.max(0.28, 0.28 + (tt - 3.4) * 0.3) : 0.28 });
+    } else {
+      if (tt >= 2.5) sta = Math.min(0.95, 0.28 + (tt - 3.4) * 0.3);
+      rDrawPlayer(c, tt < 2.5 ? x : 3.1, 0, 110, { sta });
+      rDrawPlayer(c, NET + 3.3, 0, 108, { color: COLORS.p2, alpha: 0.35, face: -1 });
+    }
+    if (tt < 2.5 && sta < 0.55) rLabel(c, 'Выносливость тает', x, 2.6, COLORS.lamp, 0.2);
+    // инициатива
+    const iv = tt < 2.9 ? 0 : Math.min(1, (tt - 2.9) / 0.5) * (tt > 4.6 ? Math.max(0, 1 - (tt - 4.6) / 0.8) : 1);
+    const bw = rS * 3.2, bx = rW / 2 - bw / 2, by = rS * 0.55;
+    c.fillStyle = 'rgba(232,239,233,0.12)'; c.fillRect(bx, by, bw, 3);
+    c.fillStyle = COLORS.p1; c.fillRect(rW / 2 - bw / 2 * iv * 0.8, by, bw / 2 * iv * 0.8, 3);
+    c.font = `700 ${Math.max(10, rS * 0.17)}px ${FD}`; c.textAlign = 'center'; c.fillStyle = COLORS.muted; c.fillText('ИНИЦИАТИВА', rW / 2, by - 6);
+  }
+  const sig = [...keys].sort().join(',');
+  if (sig !== rs_.keysOn) {
+    rs_.keysOn = sig;
+    for (const el of $('rKeys').children) {
+      const k = el.dataset.k;
+      el.classList.toggle('on', keys.has(k));
+      el.classList.toggle('hold', keys.has(k + ':hold'));
+    }
+  }
+}
+function rShow(i) {
+  rs_.i = clamp(i, 0, RULE_STEPS.length - 1);
+  const st = RULE_STEPS[rs_.i], touch = document.body.classList.contains('touch');
+  $('rStep').textContent = (rs_.i + 1) + ' / ' + RULE_STEPS.length;
+  $('rTitle').textContent = st.t;
+  let html = st.d;
+  if (touch) html = html.replace(/<kbd>([QWEASD])<\/kbd>/g, (m, k) => '<kbd>' + KEY_INFO[k][2] + '</kbd>');
+  $('rText').innerHTML = html;
+  $('rDemo').hidden = !st.demo;
+  const kk = $('rKeys'); kk.textContent = '';
+  for (const k of st.keys) {
+    const d = document.createElement('div'); d.className = 'rk'; d.dataset.k = k;
+    const b = document.createElement('b'); b.textContent = touch ? KEY_INFO[k][2] : KEY_INFO[k][0];
+    const sm = document.createElement('small'); sm.textContent = touch ? '' : KEY_INFO[k][1];
+    d.append(b); if (!touch) d.append(sm); kk.appendChild(d);
+  }
+  rs_.keysOn = '';
+  rs_.demo = st.demo ? buildDemo(st.demo) : null;
+  rs_.t0 = performance.now();
+  $('rPrev').disabled = rs_.i === 0;
+  $('rNext').textContent = rs_.i === RULE_STEPS.length - 1 ? 'Понятно' : 'Далее';
+  for (const [j, d] of [...$('rDots').children].entries()) d.setAttribute('aria-current', String(j === rs_.i));
+  requestAnimationFrame(() => { rResize(); });
+}
+function openRules(i = 0) {
+  $('rules').hidden = false;
+  const dots = $('rDots');
+  if (!dots.children.length) RULE_STEPS.forEach((st, j) => { const b = document.createElement('button'); b.setAttribute('aria-label', 'Шаг ' + (j + 1) + ': ' + st.t); b.addEventListener('click', () => rShow(j)); dots.appendChild(b); });
+  rShow(i);
+  cancelAnimationFrame(rs_.raf); rs_.raf = requestAnimationFrame(rFrame);
+  $('rNext').focus();
+}
+function closeRules() { $('rules').hidden = true; cancelAnimationFrame(rs_.raf); }
+$('openRules').addEventListener('click', () => openRules(0));
+$('pauseRules').addEventListener('click', () => openRules(0));
+$('rClose').addEventListener('click', closeRules);
+$('rPrev').addEventListener('click', () => rShow(rs_.i - 1));
+$('rNext').addEventListener('click', () => { if (rs_.i === RULE_STEPS.length - 1) closeRules(); else rShow(rs_.i + 1); });
+$('rules').addEventListener('click', e => { if (e.target === $('rules')) closeRules(); });
+$('rules').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.stopPropagation(); closeRules(); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); if (rs_.i < RULE_STEPS.length - 1) rShow(rs_.i + 1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); rShow(rs_.i - 1); }
+});
+window.addEventListener('resize', () => { if (!$('rules').hidden) rResize(); });
+
 /* ========= Цикл ========= */
 let last = performance.now(), acc = 0;
 function frame(now) {
@@ -2075,7 +2438,7 @@ function frame(now) {
 
 // Для отладки и автотестов
 window.__bdm = {
-  game, P, sh, cfg, simulate, Net, store, profile, standings, CLOUD, cloudSync, STYLES,
+  game, P, sh, cfg, simulate, Net, store, profile, standings, CLOUD, cloudSync, STYLES, openRules, rShow,
   fastForward(sec) { const n = Math.round(sec / H); for (let i = 0; i < n && game.state !== 'over'; i++) step(H); game.hitstop = 0; },
 };
 
