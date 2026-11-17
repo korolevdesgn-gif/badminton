@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Бадминтон: прототип</title>
+<title>Смэш мне в ногу</title>
+<meta name="description" content="Браузерный бадминтон: против ИИ или с другом по коду комнаты. Волан летит по настоящей физике.">
+<meta name="theme-color" content="#0b1215">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Смэш мне в ногу">
+<meta property="og:title" content="Смэш мне в ногу — бадминтон в браузере">
+<meta property="og:description" content="Против ИИ или со мной по коду комнаты. Смэши, сетки и таблица побед.">
+<meta property="og:url" content="https://korolevdesgn-gif.github.io/badminton/">
+<meta property="og:image" content="https://korolevdesgn-gif.github.io/badminton/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1215'/%3E%3Cpath d='M9 22 L22 9 L43 34 L34 43 Z' fill='%23f1eee4'/%3E%3Cpath d='M15.5 15.5 L38.5 38.5 M12 19 L36.5 41 M19 12 L41 36.5' stroke='%23b8c2bd' stroke-width='1.6'/%3E%3Ccircle cx='42' cy='42' r='9' fill='%23ff6a3d'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
@@ -60,11 +72,14 @@ kbd { font-family: var(--font-display); font-size: 11px; font-weight: 500; paddi
 
 /* Меню: шапка с игроком, две карточки режимов, таблица и управление — на одной сетке */
 #menu { background: linear-gradient(180deg, rgba(8, 13, 15, 0.84), rgba(8, 13, 15, 0.94)); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
-.menu-inner { width: min(780px, 100%); display: grid; gap: 16px; }
-.menu-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 10px; }
+#menu > .menu-inner { margin: max(28px, 5vh) auto auto; }
+.menu-inner { width: min(1060px, 100%); display: grid; gap: 18px; }
+.menu-grid { display: grid; grid-template-columns: minmax(0, 1fr) 264px; gap: 16px; align-items: start; }
+.main-col { display: grid; gap: 16px; }
+.menu-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 6px; }
 .title-block { display: grid; gap: 10px; }
 .eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lamp); }
-h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(42px, 7.4vw, 78px); line-height: 0.9; letter-spacing: -0.035em; }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(36px, 5.6vw, 68px); line-height: 0.95; letter-spacing: -0.035em; text-wrap: balance; }
 h1 span { color: var(--p1); }
 
 .me-chip { display: flex; align-items: center; gap: 12px; padding: 7px 16px 7px 7px; border-radius: 999px; border: 1px solid var(--edge); background: var(--surface); text-align: left; }
@@ -103,7 +118,6 @@ h1 span { color: var(--p1); }
 .or { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--edge); }
 
-.bottom { display: grid; grid-template-columns: minmax(0, 1fr) 232px; gap: 16px; align-items: stretch; }
 .panel-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
 .lb { padding: 18px 20px 14px; display: grid; gap: 8px; align-content: start; }
 .lb table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
@@ -113,6 +127,19 @@ h1 span { color: var(--p1); }
 .lb th.l, .lb td.l { text-align: left; }
 .lb td.rank { width: 22px; color: var(--muted); font: 700 13px var(--font-display); }
 .lb tr.top td.rank { color: var(--lamp); }
+.lb td.rank svg { display: block; width: 18px; height: 18px; }
+.lb tr.p1 td.rank { color: #f5c451; }
+.lb tr.p2 td.rank { color: #cfd6da; }
+.lb tr.p3 td.rank { color: #d98b52; }
+.lb tr.p1 td { background: rgba(245, 196, 81, 0.06); }
+.lb tr.p1 td:first-child { border-radius: 10px 0 0 10px; box-shadow: inset 2px 0 0 #f5c451; padding-left: 8px; }
+.lb tr.p1 td:last-child { border-radius: 0 10px 10px 0; padding-right: 8px; }
+.lb .wl b { font-weight: 600; color: var(--ink); }
+.lb .wl .sep { color: var(--muted); margin: 0 3px; }
+.lb .wl .ls { color: var(--muted); }
+.lb .foot .live { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #7be3a6; margin-right: 6px; box-shadow: 0 0 8px #7be3a6; vertical-align: 1px; }
+#board .mid.hot { color: var(--lamp); }
+#hint .ping { font-variant-numeric: tabular-nums; }
 .lb td.name { overflow: hidden; text-overflow: ellipsis; max-width: 0; width: 100%; padding-right: 8px; }
 .lb td .of { color: var(--muted); font-size: 12px; }
 .lb tr.me td.name { color: var(--lamp); }
@@ -120,8 +147,12 @@ h1 span { color: var(--p1); }
 .lb .empty { margin: 2px 0 4px; font-size: 13px; color: var(--muted); }
 .lb .empty[hidden] { display: none; }
 .lb .foot { margin: 2px 0 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
-.keys-panel { padding: 18px 20px; display: grid; gap: 14px; align-content: start; --accent: var(--p1); }
-.keys-panel p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.side { padding: 20px; display: grid; gap: 16px; align-content: start; --accent: var(--p1); }
+.side p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.side .keys { display: grid; gap: 12px; }
+.side .about { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid var(--edge); }
+.side .about p b { color: var(--ink); font-weight: 600; }
+body.touch .side .about { padding-top: 0; border-top: 0; }
 .caps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .cap { height: 50px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; }
 .cap b { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
@@ -180,7 +211,8 @@ body.touch .only-keys { display: none; }
 .wait-actions .btn { padding: 10px 14px; font-size: 13px; }
 .linkbtn { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
 #board .mid { font-variant-numeric: tabular-nums; }
-@media (max-width: 620px) { .cards, .bottom { grid-template-columns: 1fr; } .menu-head { align-items: flex-start; } }
+@media (max-width: 900px) { .menu-grid { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .cards { grid-template-columns: 1fr; } .menu-head { align-items: flex-start; } }
 @media (max-width: 480px) { .lb th:nth-child(5), .lb td:nth-child(5) { display: none; } .lb th + th, .lb td + td { padding-left: 10px; } }
 @media (max-height: 520px) {
   h1 { font-size: 40px; }
@@ -225,72 +257,79 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
 <section class="overlay" id="menu" aria-label="Меню">
   <div class="menu-inner">
     <header class="menu-head">
-      <div class="title-block">
-        <p class="eyebrow">Прототип · партия до 15</p>
-        <h1>Бадмин<span>тон</span></h1>
-      </div>
+      <h1>Смэш мне <span>в ногу</span></h1>
       <button class="me-chip" id="editName" title="Сменить имя">
         <span class="ava" id="meAva" aria-hidden="true">?</span>
-        <span class="me-txt"><b id="meName">…</b><small id="meBest">смэшей пока не было</small></span>
+        <span class="me-txt"><b id="meName">…</b><small id="meBest">рекордов пока нет</small></span>
         <span class="pen" aria-hidden="true">✎</span>
       </button>
     </header>
 
-    <div class="cards">
-      <article class="mcard panel ai">
-        <div class="mcard-head">
-          <h2>Против ИИ</h2>
-          <p id="diffNote">Держит розыгрыш, но ошибается под давлением</p>
-        </div>
-        <div class="mcard-body">
-          <div class="seg" role="radiogroup" aria-label="Сложность ИИ" id="diffSeg">
-            <button role="radio" data-diff="easy" aria-checked="false">Лёгкий</button>
-            <button role="radio" data-diff="medium" aria-checked="true">Средний</button>
-            <button role="radio" data-diff="hard" aria-checked="false">Сложный</button>
-          </div>
-          <button class="btn accent block" id="playAi">Играть</button>
-        </div>
-      </article>
+    <div class="menu-grid">
+      <div class="main-col">
+        <div class="cards">
+          <article class="mcard panel ai">
+            <div class="mcard-head">
+              <h2>Против ИИ</h2>
+              <p id="diffNote">Держит розыгрыш, но ошибается под давлением</p>
+            </div>
+            <div class="mcard-body">
+              <div class="seg" role="radiogroup" aria-label="Сложность ИИ" id="diffSeg">
+                <button role="radio" data-diff="easy" aria-checked="false">Лёгкий</button>
+                <button role="radio" data-diff="medium" aria-checked="true">Средний</button>
+                <button role="radio" data-diff="hard" aria-checked="false">Сложный</button>
+              </div>
+              <button class="btn accent block" id="playAi">Играть</button>
+            </div>
+          </article>
 
-      <article class="mcard panel net" id="onlineCard">
-        <div class="mcard-head">
-          <h2>С другом по сети</h2>
-          <p>Один создаёт комнату, второй входит по коду. Каждый видит себя слева</p>
+          <article class="mcard panel net" id="onlineCard">
+            <div class="mcard-head">
+              <h2>С другом по сети</h2>
+              <p>Один создаёт комнату, второй входит по коду. Каждый видит себя слева</p>
+            </div>
+            <div class="mcard-body" id="netControls">
+              <button class="btn accent block" id="netHost">Создать комнату</button>
+              <div class="or">или войти по коду</div>
+              <div class="net-join">
+                <input id="netCode" maxlength="4" placeholder="Код" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код комнаты">
+                <button class="btn" id="netJoin">Войти</button>
+              </div>
+            </div>
+            <div class="net-status" id="netStatus" aria-live="polite"></div>
+          </article>
         </div>
-        <div class="mcard-body" id="netControls">
-          <button class="btn accent block" id="netHost">Создать комнату</button>
-          <div class="or">или войти по коду</div>
-          <div class="net-join">
-            <input id="netCode" maxlength="4" placeholder="Код" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код комнаты">
-            <button class="btn" id="netJoin">Войти</button>
-          </div>
-        </div>
-        <div class="net-status" id="netStatus" aria-live="polite"></div>
-      </article>
-    </div>
 
-    <div class="bottom">
-      <section class="lb panel" aria-label="Таблица побед">
-        <h2 class="panel-title">Таблица</h2>
-        <table>
-          <thead><tr><th class="l">#</th><th class="l">Игрок</th><th>Победы</th><th>Против ИИ</th><th>Смэш</th></tr></thead>
-          <tbody id="lbBody"></tbody>
-        </table>
-        <p class="empty" id="lbEmpty">Пока пусто. Сыграй партию, и ты появишься здесь.</p>
-        <p class="foot">Результаты хранятся у каждого и обмениваются, когда вы играете по сети</p>
-      </section>
-      <section class="keys-panel panel only-keys" aria-label="Управление">
-        <h2 class="panel-title">Управление</h2>
-        <div class="caps">
-          <div class="cap shot"><b>Q</b><small>клир</small></div>
-          <div class="cap"><b>W</b><small>прыжок</small></div>
-          <div class="cap shot"><b>E</b><small>дроп</small></div>
-          <div class="cap"><b>A</b><small>назад</small></div>
-          <div class="cap shot"><b>S</b><small>смэш</small></div>
-          <div class="cap"><b>D</b><small>к сетке</small></div>
+        <section class="lb panel" aria-label="Таблица побед">
+          <h2 class="panel-title">Таблица</h2>
+          <table>
+            <thead><tr><th class="l">#</th><th class="l">Игрок</th><th title="Победы – поражения в играх с друзьями">Друзья</th><th title="Победы – поражения против ИИ">ИИ</th><th>Смэш</th></tr></thead>
+            <tbody id="lbBody"></tbody>
+          </table>
+          <p class="empty" id="lbEmpty">Пока пусто. Сыграй партию, и ты появишься здесь.</p>
+          <p class="foot" id="lbFoot">Результаты хранятся у каждого и обмениваются, когда вы играете по сети</p>
+        </section>
+      </div>
+
+      <aside class="side panel" aria-label="Управление и об игре">
+        <div class="keys only-keys">
+          <h2 class="panel-title">Управление</h2>
+          <div class="caps">
+            <div class="cap shot"><b>Q</b><small>клир</small></div>
+            <div class="cap"><b>W</b><small>прыжок</small></div>
+            <div class="cap shot"><b>E</b><small>дроп</small></div>
+            <div class="cap"><b>A</b><small>назад</small></div>
+            <div class="cap shot"><b>S</b><small>смэш</small></div>
+            <div class="cap"><b>D</b><small>к сетке</small></div>
+          </div>
+          <p>Ниже плеча те же кнопки дают свечу, сетку и драйв. <kbd>Esc</kbd> пауза</p>
         </div>
-        <p>Ниже плеча те же кнопки дают свечу, сетку и драйв. <kbd>Esc</kbd> пауза</p>
-      </section>
+        <div class="about">
+          <h2 class="panel-title">Об игре</h2>
+          <p>Бадминтон сбоку с настоящей физикой волана: клир падает почти отвесно, а смэш теряет скорость ещё до сетки.</p>
+          <p>Партия до <b>15</b>, нужен отрыв в два очка. Спорные мячи показывает след на полу.</p>
+        </div>
+      </aside>
     </div>
     <p class="touch-note only-touch">Слева бег, справа удары. Держи телефон горизонтально.</p>
   </div>
@@ -504,6 +543,7 @@ function setupServe() {
   rcv.x = NET - rcv.face * (SHORT + 1.6);
   for (const p of P) { p.vx = 0; p.vy = 0; p.y = 0; p.onGround = true; p.recover = 0; p.swing = null; p.shotReq = null; p.jumpReq = 0; if (p.ai) { p.ai.plan = null; p.ai.served = false; p.ai.serveTimer = rnd(0.6, 1.1); p.ai.seen = -1; } }
   Object.assign(sh, { held: true, inPlay: false, lastHitter: null, netHit: false, isServe: false, trail: [], predLand: null, vx: 0, vy: 0, ang: -Math.PI / 2 });
+  game.mark = null;
   placeInHand(srv);
   game.state = 'serve'; game.stateT = 0; game.rallyHits = 0; game.posEpoch++;
   updateBoard(); updateHint();
@@ -606,6 +646,10 @@ function onLand() {
   else if (sh.isServe && Math.abs(sh.x - NET) < SHORT) { winner = opp; label = 'Подача не долетела'; }
   else { winner = hitter; label = 'В корт'; }
   fx('floor');
+  const cm = d => Math.max(1, Math.round(d * 100)) + ' см';
+  if (label === 'Аут') { const d = sh.x < 0 ? -sh.x : sh.x - COURT; fx('mark', +sh.x.toFixed(3), true, 'аут · ' + cm(d), sh.x < 0 ? 0 : COURT); }
+  else if (label === 'Подача не долетела') { const d = SHORT - Math.abs(sh.x - NET); fx('mark', +sh.x.toFixed(3), true, 'недолёт · ' + cm(d), NET + Math.sign(sh.x - NET) * SHORT); }
+  else if (label === 'В корт') { const dB = landSide === 0 ? sh.x : COURT - sh.x; fx('mark', +sh.x.toFixed(3), false, dB < 0.6 ? 'в корте · ' + cm(dB) + ' от линии' : 'в корте', dB < 0.6 ? (landSide === 0 ? 0 : COURT) : null); }
   award(winner, label);
 }
 function award(w, label) {
@@ -615,6 +659,7 @@ function award(w, label) {
   game.score[w.idx]++;
   game.server = w.idx;
   game.state = 'point'; game.stateT = 0;
+  updateBestRally(game.rallyHits);
   fx('popup', label, +clamp(sh.x, VIEW_L + 1, VIEW_R - 1).toFixed(2), 0.75, w.color, true, true);
   const a = game.score[w.idx], b = game.score[1 - w.idx];
   if ((a >= TARGET && a - b >= 2) || a >= CAP) game.over = w.idx;
@@ -815,6 +860,7 @@ function endGame() {
   if (game.mode === '1p') {
     noteName(profile.pid, profile.name, now);
     addRecs([{ id: rid(12), t: now, k: 'ai', p: profile.pid, lv: game.diff, win: game.over === 0, s: [game.score[0], game.score[1]] }]);
+    cloudSync();
   } else if (game.mode === 'online' && Net.role === 'host' && Net.peerPid) {
     fx('match', { id: rid(12), t: now, k: 'net', a: profile.pid, b: Net.peerPid, w: game.over === 0 ? profile.pid : Net.peerPid, s: [game.score[0], game.score[1]] });
   }
@@ -1056,11 +1102,16 @@ function drawWall(c, dt) {
     c.fillStyle = wall.color;
     c.fillText('СМЭШ', cx + sc * 1.05, cy + sc * 0.02);
   } else {
-    c.globalAlpha = 0.5;
-    c.fillStyle = COLORS.muted;
-    c.font = `500 ${sc * 0.2}px ${disp}`;
-    const label = game.state === 'serve' ? 'ПОДАЧА' : 'РОЗЫГРЫШ, УДАРОВ';
+    const ps = game.state === 'serve' ? pointStatus() : null;
+    const myRally = store.rally[profile.pid] || 0;
+    const record = (game.mode === '1p' || game.mode === 'online') && game.state !== 'serve' && myRally >= 5 && game.rallyHits > myRally;
+    const hot = !!ps || record;
+    c.globalAlpha = hot ? 0.95 : 0.5;
+    c.fillStyle = hot ? COLORS.lamp : COLORS.muted;
+    c.font = `${hot ? 700 : 500} ${sc * 0.2}px ${disp}`;
+    const label = ps ? PS_TEXT[ps.kind].toUpperCase() : record ? 'РЕКОРД РОЗЫГРЫША' : game.state === 'serve' ? 'ПОДАЧА' : 'РОЗЫГРЫШ, УДАРОВ';
     c.fillText(label, cx, cy - sc * 0.35);
+    c.globalAlpha = hot ? 0.9 : 0.5;
     c.fillStyle = COLORS.ink;
     const big = game.state === 'serve' ? P[game.server].name.split(' ·')[0].toUpperCase() : String(game.rallyHits);
     let fs = sc * 0.72;
@@ -1202,7 +1253,31 @@ function drawShuttle(c) {
   c.restore();
 }
 
+function drawMark(c, dt) {
+  const m = game.mark; if (!m) return;
+  m.t += dt;
+  const a = m.t < 0.15 ? m.t / 0.15 : m.t > 2.6 ? Math.max(0, 1 - (m.t - 2.6) / 0.5) : 1;
+  if (a <= 0) return;
+  const col = m.out ? '#ff7a6a' : '#7be3a6';
+  c.save(); c.globalAlpha = a;
+  if (m.lineX !== null && m.lineX !== undefined) { // подсветка линии, о которую спорим
+    c.strokeStyle = col; c.lineWidth = Math.max(2, sc * 0.05); c.shadowColor = col; c.shadowBlur = 8;
+    c.beginPath(); c.moveTo(X(m.lineX, -HALF_W), Y(0, -HALF_W)); c.lineTo(X(m.lineX, HALF_W), Y(0, HALF_W)); c.stroke(); c.shadowBlur = 0;
+  }
+  const r = sc * (0.16 + 0.06 * Math.max(0, 1 - m.t * 3));
+  c.strokeStyle = col; c.lineWidth = 2;
+  c.beginPath(); c.ellipse(X(m.x), Y(0), r, r * 0.32, 0, 0, Math.PI * 2); c.stroke();
+  c.fillStyle = col; c.globalAlpha = a * 0.25;
+  c.beginPath(); c.ellipse(X(m.x), Y(0), r * 0.55, r * 0.18, 0, 0, Math.PI * 2); c.fill();
+  c.globalAlpha = a;
+  c.font = `700 ${Math.max(11, sc * 0.2)}px ${FD}`; c.textAlign = 'center'; c.textBaseline = 'top';
+  c.fillText(m.text.toUpperCase(), X(clamp(m.x, VIEW_L + 1.4, VIEW_R - 1.4)), Y(0, -HALF_W) + sc * 0.14);
+  c.restore();
+}
 function addPopup(text, x, y, color, big, judge) {
+  // новая надпись сдвигает соседние вверх и ускоряет их исчезновение, итоговая надпись розыгрыша — одна
+  if (judge) game.popups = game.popups.filter(p => !p.judge);
+  else for (const p of game.popups) if (!p.judge && Math.abs(p.x - x) < 2.2) { p.y += 0.42; p.t = Math.max(p.t, 0.45); }
   game.popups.push({ text, x, y, color, big, judge, t: 0 });
   if (game.popups.length > 6) game.popups.shift();
 }
@@ -1234,6 +1309,7 @@ function render(dt) {
     ctx.strokeStyle = 'rgba(255,215,138,0.8)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.ellipse(X(sh.predLand), Y(0), sc * 0.18, sc * 0.05, 0, 0, Math.PI * 2); ctx.stroke();
   }
+  drawMark(ctx, dt);
   for (const p of P) drawPlayer(ctx, p, performance.now() / 1000);
   drawNearPost(ctx);
   drawShuttle(ctx);
@@ -1242,6 +1318,17 @@ function render(dt) {
 }
 
 /* ========= Интерфейс ========= */
+function pointStatus() {
+  if (game.over !== null || game.mode === 'demo') return null;
+  const [a, b] = game.score;
+  const wins = (x, y) => (x + 1 >= TARGET && x + 1 - y >= 2) || x + 1 >= CAP;
+  const wa = wins(a, b), wb = wins(b, a);
+  if (wa && wb) return { kind: 'golden' };
+  if (wa || wb) return { kind: 'gp', idx: wa ? 0 : 1 };
+  if (a >= TARGET - 1 && a === b) return { kind: 'deuce' };
+  return null;
+}
+const PS_TEXT = { gp: 'геймбол', golden: 'решающее очко', deuce: 'больше-меньше' };
 function updateBoard() {
   const L = mirror ? 1 : 0, Rr = 1 - L;
   $('pts0').textContent = game.score[L]; $('pts1').textContent = game.score[Rr];
@@ -1249,7 +1336,11 @@ function updateBoard() {
   $('pts0').style.color = P[L].color; $('pts1').style.color = P[Rr].color;
   $('side0').classList.toggle('serving', game.server === L);
   $('side1').classList.toggle('serving', game.server === Rr);
-  if (game.mode !== 'online') $('boardMid').textContent = 'до 15';
+  const ps = pointStatus();
+  $('boardMid').textContent = ps ? PS_TEXT[ps.kind] : 'до 15';
+  $('boardMid').classList.toggle('hot', !!ps);
+  const me = localIdx();
+  document.title = game.mode === '1p' || game.mode === 'online' ? game.score[me] + ':' + game.score[1 - me] + ' · Смэш мне в ногу' : 'Смэш мне в ногу';
 }
 function updateHint() {
   const el = $('hint');
@@ -1259,7 +1350,7 @@ function updateHint() {
     const b = game.mode === '2p' && game.server === 1 ? ['O', 'U', 'K'] : ['Q', 'E', 'S'];
     el.innerHTML = `<span class="serve">Подача: <kbd>${b[0]}</kbd> высокая · <kbd>${b[1]}</kbd> короткая · <kbd>${b[2]}</kbd> флик</span>`;
   } else if (game.mode === '1p' || game.mode === 'online') {
-    el.innerHTML = '<span><kbd>A</kbd> <kbd>D</kbd> бег · <kbd>W</kbd> прыжок · <kbd>Q</kbd> клир · <kbd>E</kbd> дроп · <kbd>S</kbd> смэш</span><span><kbd>Esc</kbd> пауза</span>';
+    el.innerHTML = '<span><kbd>A</kbd> <kbd>D</kbd> бег · <kbd>W</kbd> прыжок · <kbd>Q</kbd> клир · <kbd>E</kbd> дроп · <kbd>S</kbd> смэш</span><span><kbd>Esc</kbd> пауза</span>' + (game.mode === 'online' ? '<span class="ping" id="ping"></span>' : '');
   } else {
     el.innerHTML = '<span>Слева: <kbd>Q</kbd> <kbd>E</kbd> <kbd>S</kbd> удары</span><span>Справа: <kbd>O</kbd> <kbd>U</kbd> <kbd>K</kbd> удары</span><span><kbd>Esc</kbd> пауза</span>';
   }
@@ -1280,7 +1371,7 @@ function toMenu() {
   setNetStatus(NET_HINT);
   $('over').hidden = true; $('pause').hidden = true; $('menu').hidden = false;
   document.body.classList.add('menu-open');
-  renderStandings();
+  renderStandings(); cloudSync();
   game.paused = false;
   setupMode('demo');
   $('playAi').focus();
@@ -1356,7 +1447,7 @@ const Net = {
     if (now - this.lastPing > 500 && game.mode === 'online') {
       this.lastPing = now;
       const ms = Math.round((this.role === 'host' ? this.remoteRtt : this.rtt) * 1000);
-      $('boardMid').textContent = ms ? 'пинг ' + ms + ' мс' : 'до 15';
+      const pe = $('ping'); if (pe) pe.textContent = ms ? 'пинг ' + ms + ' мс' : '';
     }
   },
 };
@@ -1437,7 +1528,9 @@ function netCallbacks() {
       const link = /^https?:$/.test(location.protocol) && !inClaude() ? location.origin + location.pathname + '#' + code : '';
       $('netControls').hidden = true;
       setNetStatus(`<div class="wait"><span class="code">${code}</span><span>Отправь код${link ? ' или ссылку' : ''} другу. Игра начнётся, как только он войдёт.</span>` +
-        `<span class="wait-actions">${link ? '<button class="btn soft" id="copyLink">Скопировать ссылку</button>' : ''}<button class="linkbtn" id="netCancel">Отменить</button></span></div>`);
+        `<span class="wait-actions">${link && navigator.share ? '<button class="btn accent" id="shareLink">Пригласить</button>' : ''}${link ? '<button class="btn soft" id="copyLink">Скопировать ссылку</button>' : ''}<button class="linkbtn" id="netCancel">Отменить</button></span></div>`);
+      const shb = $('shareLink');
+      if (shb) shb.addEventListener('click', () => { navigator.share({ title: 'Смэш мне в ногу', text: 'Залетай на партию в бадминтон! Код комнаты ' + code, url: link }).catch(() => {}); });
       const cl = $('copyLink');
       if (cl) cl.addEventListener('click', () => { try { navigator.clipboard.writeText(link).then(() => { cl.textContent = 'Скопировано'; }, () => { cl.textContent = link; }); } catch (_) { cl.textContent = link; } });
       $('netCancel').addEventListener('click', () => { netClose(); setNetStatus(NET_HINT); });
@@ -1554,7 +1647,12 @@ function onSnapshot(m) {
   const boardChanged = s0 !== game.score[0] || s1 !== game.score[1] || server !== game.server;
   game.state = state; game.score[0] = s0; game.score[1] = s1; game.server = server; game.rallyHits = rally; game.over = over;
   if (boardChanged) updateBoard();
-  if (state !== prev) { updateHint(); if (state === 'over') showOver(); else if (prev === 'over') $('over').hidden = true; }
+  if (state !== prev) {
+    updateHint();
+    if (state === 'point') updateBestRally(rally);
+    if (state === 'serve') game.mark = null;
+    if (state === 'over') showOver(); else if (prev === 'over') $('over').hidden = true;
+  }
   const me = P[Net.myIdx], other = P[1 - Net.myIdx];
   if (ep !== Net.posEpoch) {
     Net.posEpoch = ep;
@@ -1603,7 +1701,8 @@ function applyFx(type, a) {
     case 'floor': sndFloor(); break;
     case 'point': sndPoint(game.mode === '2p' || a[0] === localIdx()); break;
     case 'recover': if (Net.role === 'guest' && a[0] === Net.myIdx) P[a[0]].recover = a[1]; break;
-    case 'match': addRecs([a[0]]); break;
+    case 'match': addRecs([a[0]]); cloudSync(); break;
+    case 'mark': game.mark = { x: a[0], out: !!a[1], text: String(a[2]).slice(0, 40), lineX: a[3], t: 0 }; break;
   }
 }
 function fx(type, ...a) {
@@ -1631,10 +1730,12 @@ const profile = loadJSON('bdm-profile', null) || {};
 if (typeof profile.pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(profile.pid)) profile.pid = rid(10);
 profile.name = cleanName(profile.name);
 const store = { recs: [], names: {} };
-{ const r = loadJSON('bdm-recs', []), n = loadJSON('bdm-names', {}), b = loadJSON('bdm-best', {}); if (Array.isArray(r)) store.recs = r; if (n && typeof n === 'object') store.names = n; store.best = b && typeof b === 'object' ? b : {}; }
-function saveStore() { if (store.recs.length > 800) store.recs = store.recs.slice(-800); saveJSON('bdm-recs', store.recs); saveJSON('bdm-names', store.names); saveJSON('bdm-best', store.best); }
+{ const r = loadJSON('bdm-recs', []), n = loadJSON('bdm-names', {}), b = loadJSON('bdm-best', {}), ra = loadJSON('bdm-rally', {}), cl = loadJSON('bdm-cloud', []); if (Array.isArray(r)) store.recs = r; if (n && typeof n === 'object') store.names = n; store.best = b && typeof b === 'object' ? b : {}; store.rally = ra && typeof ra === 'object' ? ra : {}; store.cloud = new Set(Array.isArray(cl) ? cl.slice(-6000) : []); }
+function saveStore() { if (store.recs.length > 800) store.recs = store.recs.slice(-800); saveJSON('bdm-recs', store.recs); saveJSON('bdm-names', store.names); saveJSON('bdm-best', store.best); saveJSON('bdm-rally', store.rally); saveJSON('bdm-cloud', [...store.cloud].slice(-6000)); }
 function noteBest(pid, kmh) { if (!PID.test(pid) || !Number.isInteger(kmh) || kmh < 20 || kmh > 400) return false; if ((store.best[pid] || 0) >= kmh) return false; store.best[pid] = kmh; return true; }
 function updateBest(kmh) { if (noteBest(profile.pid, kmh)) { saveStore(); renderHello(); renderStandings(); } }
+function noteRally(pid, n) { if (!PID.test(pid) || !Number.isInteger(n) || n < 1 || n > 999) return false; if ((store.rally[pid] || 0) >= n) return false; store.rally[pid] = n; return true; }
+function updateBestRally(n) { if (game.mode !== '1p' && game.mode !== 'online') return; if (noteRally(profile.pid, n)) { saveStore(); renderHello(); } }
 function noteName(pid, name, t) {
   name = cleanName(name);
   if (typeof pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(pid) || !name || !Number.isFinite(t)) return false;
@@ -1659,6 +1760,7 @@ function addRecs(list) {
 function standings() {
   const st = {};
   const row = pid => st[pid] || (st[pid] = { pid, w: 0, n: 0, aw: 0, an: 0, lv: { easy: 0, medium: 0, hard: 0 } });
+  // место — по победам над друзьями, при равенстве по разнице побед и поражений, потом по победам над ИИ
   for (const r of store.recs) {
     if (r.k === 'net') { const a = row(r.a), b = row(r.b); a.n++; b.n++; (r.w === r.a ? a : b).w++; }
     else { const a = row(r.p); a.an++; if (r.win) { a.aw++; a.lv[r.lv]++; } }
@@ -1668,6 +1770,7 @@ function standings() {
   rows.sort((a, b) => b.w - a.w || (b.w - (b.n - b.w)) - (a.w - (a.n - a.w)) || b.aw - a.aw || a.name.localeCompare(b.name));
   return rows;
 }
+const CUP_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 3h10v1.6h3.2v2.6c0 2.3-1.7 4.2-3.9 4.5A5.2 5.2 0 0 1 13 14.6v2.2h3.4V19H7.6v-2.2H11v-2.2a5.2 5.2 0 0 1-3.3-2.9C5.5 11.4 3.8 9.5 3.8 7.2V4.6H7V3Zm-1.6 3.2v1c0 1.2.7 2.2 1.7 2.6A8 8 0 0 1 7 8.4V6.2H5.4Zm11.6 0v2.2c0 .5 0 .9-.1 1.4 1-.4 1.7-1.4 1.7-2.6v-1H17Z"/><rect x="6.6" y="19.8" width="10.8" height="1.8" rx=".9" fill="currentColor"/></svg>';
 function renderStandings() {
   const body = $('lbBody'); if (!body) return;
   const rows = standings();
@@ -1677,12 +1780,20 @@ function renderStandings() {
   body.textContent = '';
   for (const r of shown) {
     const tr = document.createElement('tr');
-    tr.className = (r.pid === profile.pid ? 'me ' : '') + (rows.indexOf(r) === 0 ? 'top' : '');
+    const place = rows.indexOf(r) + 1, cup = place <= 3 && r.w > 0;
+    tr.className = (r.pid === profile.pid ? 'me ' : '') + (cup ? 'p' + place : '');
     const td = (cls, txt) => { const c = document.createElement('td'); if (cls) c.className = cls; if (txt !== undefined) c.textContent = txt; tr.appendChild(c); return c; };
-    td('rank l', String(rows.indexOf(r) + 1));
+    const rk = td('rank l');
+    if (cup) { rk.innerHTML = CUP_SVG; rk.title = place + '-е место'; } else rk.textContent = String(place);
     const nm = td('name l', r.name);
     if (r.pid === profile.pid) { const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'ты'; nm.appendChild(t); }
-    const cell = (w, n) => { const c = td(''); c.textContent = String(w); const o = document.createElement('span'); o.className = 'of'; o.textContent = ' из ' + n; c.appendChild(o); return c; };
+    const cell = (w, n) => {
+      const c = td('wl');
+      if (!n) { c.textContent = '—'; c.style.color = 'var(--muted)'; return c; }
+      const W = document.createElement('b'), S = document.createElement('span'), L = document.createElement('span');
+      W.textContent = String(w); S.className = 'sep'; S.textContent = '–'; L.className = 'ls'; L.textContent = String(n - w);
+      c.append(W, S, L); return c;
+    };
     cell(r.w, r.n);
     const ai = cell(r.aw, r.an);
     ai.title = 'Победы над ИИ: лёгкий ' + r.lv.easy + ' · средний ' + r.lv.medium + ' · сложный ' + r.lv.hard;
@@ -1695,8 +1806,9 @@ function renderStandings() {
 function renderHello() {
   $('meName').textContent = profile.name || 'Без имени';
   $('meAva').textContent = (profile.name || '?').charAt(0).toUpperCase();
-  const b = store.best[profile.pid];
-  $('meBest').textContent = b ? 'лучший смэш ' + b + ' км/ч' : 'смэшей пока не было';
+  const b = store.best[profile.pid], ra = store.rally[profile.pid];
+  const parts = [b ? 'смэш ' + b + ' км/ч' : '', ra ? 'розыгрыш ' + ra + ' уд.' : ''].filter(Boolean);
+  $('meBest').textContent = parts.length ? 'рекорды: ' + parts.join(' · ') : 'рекордов пока нет';
 }
 const DIFF_NOTE = { easy: 'Медленный и часто ошибается. Для разминки', medium: 'Держит розыгрыш, но ошибается под давлением', hard: 'Быстрая реакция, редкие ошибки, любит смэш' };
 function renderDiffNote() { $('diffNote').textContent = DIFF_NOTE[game.diff]; }
@@ -1710,7 +1822,7 @@ $('nameForm').addEventListener('submit', e => {
   profile.name = n; saveJSON('bdm-profile', profile);
   noteName(profile.pid, n, Date.now()); saveStore();
   $('nameDlg').hidden = true;
-  renderHello(); renderStandings();
+  renderHello(); renderStandings(); cloudSync();
   if (game.mode !== 'demo') { P[localIdx()].name = n; updateBoard(); }
 });
 $('nameDlg').addEventListener('keydown', e => { if (e.key === 'Escape' && profile.name) $('nameDlg').hidden = true; });
@@ -1725,7 +1837,7 @@ function startSync() {
   const total = Math.max(6, chunks.length * 3);
   Net.syncIv = setInterval(() => {
     if (!Net.connected || i >= total) { clearInterval(Net.syncIv); return; }
-    if (i % 3 === 0) Net.send({ t: 'sync', n: names, b: store.best });
+    if (i % 3 === 0) Net.send({ t: 'sync', n: names, b: store.best, ra: store.rally });
     else if (chunks.length) Net.send({ t: 'sync', r: chunks[i % chunks.length] });
     i++;
   }, 300);
@@ -1734,6 +1846,7 @@ function onSync(m) {
   let changed = false;
   if (m.n && typeof m.n === 'object') for (const pid of Object.keys(m.n).slice(0, 200)) { const v = m.n[pid]; if (Array.isArray(v) && noteName(pid, v[0], v[1])) changed = true; }
   if (m.b && typeof m.b === 'object') for (const pid of Object.keys(m.b).slice(0, 200)) if (noteBest(pid, m.b[pid])) changed = true;
+  if (m.ra && typeof m.ra === 'object') for (const pid of Object.keys(m.ra).slice(0, 200)) if (noteRally(pid, m.ra[pid])) changed = true;
   if (changed) { saveStore(); renderStandings(); }
   if (m.r) addRecs(m.r.slice(0, 60));
 }
@@ -1745,6 +1858,56 @@ function setPeer(pid, nm) {
   if (noteName(pid, nm, Date.now())) { saveStore(); renderStandings(); }
   if (game.mode === 'online') { P[1 - Net.myIdx].name = nm; updateBoard(); }
 }
+
+
+/* ========= Общая таблица (Supabase) =========
+   Пока url и key пустые, таблица работает как раньше: у каждого своя, обмен при игре по сети.
+   Ключ — публичный (anon): запись и чтение разрешены политиками базы, удаление запрещено. */
+const CLOUD = { url: 'https://ktpeclypxevbfwtvuwbi.supabase.co', key: 'sb_publishable_zydu8BCg0hb0x92Vh0e1uQ_oMIMObKn' };
+const cloudOn = () => !!(CLOUD.url && CLOUD.key) && !inClaude();
+let cloudBusy = false, cloudOk = null;
+async function cloudReq(path, opts = {}) {
+  const r = await fetch(CLOUD.url + '/rest/v1/' + path, { ...opts, headers: { apikey: CLOUD.key, ...(CLOUD.key.startsWith('eyJ') ? { Authorization: 'Bearer ' + CLOUD.key } : {}), 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+  if (!r.ok) throw new Error('cloud ' + r.status);
+  const txt = await r.text();
+  return txt ? JSON.parse(txt) : null;
+}
+const toRow = r => r.k === 'ai'
+  ? { id: r.id, t: r.t, k: 'ai', p: r.p, lv: r.lv, win: r.win, s1: r.s[0], s2: r.s[1], a: null, b: null, w: null }
+  : { id: r.id, t: r.t, k: 'net', a: r.a, b: r.b, w: r.w, s1: r.s[0], s2: r.s[1], p: null, lv: null, win: null };
+const fromRow = x => x.k === 'ai'
+  ? { id: x.id, t: Number(x.t), k: 'ai', p: x.p, lv: x.lv, win: !!x.win, s: [x.s1 | 0, x.s2 | 0] }
+  : { id: x.id, t: Number(x.t), k: 'net', a: x.a, b: x.b, w: x.w, s: [x.s1 | 0, x.s2 | 0] };
+function renderFoot() {
+  const f = $('lbFoot'); if (!f) return;
+  if (!cloudOn()) { f.textContent = 'Результаты хранятся у каждого и обмениваются, когда вы играете по сети'; return; }
+  if (cloudOk === false) { f.textContent = 'Нет связи с общей таблицей, показаны результаты с этого устройства'; return; }
+  f.innerHTML = '<span class="live"></span>' + (cloudOk ? 'Общая таблица для всех игроков' : 'Загружаем общую таблицу…');
+}
+async function cloudSync() {
+  if (!cloudOn() || cloudBusy) return;
+  cloudBusy = true;
+  try {
+    const pending = store.recs.filter(r => !store.cloud.has(r.id)).slice(-200);
+    if (pending.length) {
+      await cloudReq('matches', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' }, body: JSON.stringify(pending.map(toRow)) });
+      pending.forEach(r => store.cloud.add(r.id));
+    }
+    if (profile.name) await cloudReq('players?on_conflict=pid', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify([{ pid: profile.pid, name: profile.name, best_smash: store.best[profile.pid] || 0, best_rally: store.rally[profile.pid] || 0, updated_at: new Date().toISOString() }]) });
+    const [ms, ps] = await Promise.all([
+      cloudReq('matches?select=id,t,k,a,b,w,p,lv,win,s1,s2&order=t.desc&limit=5000'),
+      cloudReq('players?select=pid,name,best_smash,best_rally,updated_at&limit=3000'),
+    ]);
+    const fresh = (ms || []).map(fromRow);
+    fresh.forEach(r => store.cloud.add(r.id));
+    addRecs(fresh);
+    for (const pl of ps || []) { noteName(pl.pid, pl.name, Date.parse(pl.updated_at) || 1); noteBest(pl.pid, pl.best_smash | 0); noteRally(pl.pid, pl.best_rally | 0); }
+    saveStore(); cloudOk = true;
+  } catch (e) { cloudOk = false; }
+  finally { cloudBusy = false; renderStandings(); renderHello(); renderFoot(); }
+}
+setInterval(() => { if (!document.hidden && !$('menu').hidden) cloudSync(); }, 45000);
 
 /* ========= Цикл ========= */
 let last = performance.now(), acc = 0;
@@ -1766,7 +1929,7 @@ function frame(now) {
 
 // Для отладки и автотестов
 window.__bdm = {
-  game, P, sh, cfg, simulate, Net, store, profile, standings,
+  game, P, sh, cfg, simulate, Net, store, profile, standings, CLOUD, cloudSync,
   fastForward(sec) { const n = Math.round(sec / H); for (let i = 0; i < n && game.state !== 'over'; i++) step(H); game.hitstop = 0; },
 };
 
@@ -1788,7 +1951,7 @@ function start(data) {
   if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен, нажми «Войти».'); }
   if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Внутри claude.ai браузер не даёт игрокам соединиться напрямую. Играй по сети на сайте: <a href="https://korolevdesgn-gif.github.io/badminton/" style="color: var(--ink)">korolevdesgn-gif.github.io/badminton</a>'); }
   window.addEventListener('beforeunload', () => { if (Net.role) netClose(); });
-  renderHello(); renderStandings(); renderDiffNote();
+  renderHello(); renderStandings(); renderDiffNote(); renderFoot(); cloudSync();
   if (!profile.name) openNameDlg();
   requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 }
