@@ -20,6 +20,9 @@
   --ink: #e8efe9;
   --muted: #8ba49a;
   --edge: rgba(232, 239, 233, 0.12);
+  --surface: rgba(10, 16, 18, 0.86);
+  --p1-ink: #1c0c06;
+  --p2-ink: #04161b;
   --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
   --font-body: "Golos Text", "Segoe UI", system-ui, sans-serif;
   color-scheme: dark;
@@ -55,70 +58,89 @@ kbd { font-family: var(--font-display); font-size: 11px; font-weight: 500; paddi
 .overlay[hidden] { display: none; }
 #nameDlg { z-index: 12; background: rgba(8, 13, 15, 0.72); }
 
-/* Меню: заголовок, две карточки режимов, таблица и управление */
-#menu { background: linear-gradient(180deg, rgba(9,14,16,0.86), rgba(9,14,16,0.93)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
-.menu-inner { width: min(760px, 100%); display: grid; gap: 22px; }
-.menu-head { display: grid; gap: 8px; }
+/* Меню: шапка с игроком, две карточки режимов, таблица и управление — на одной сетке */
+#menu { background: linear-gradient(180deg, rgba(8, 13, 15, 0.84), rgba(8, 13, 15, 0.94)); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.menu-inner { width: min(780px, 100%); display: grid; gap: 16px; }
+.menu-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 10px; }
+.title-block { display: grid; gap: 10px; }
 .eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lamp); }
-h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(42px, 7.5vw, 80px); line-height: 0.92; letter-spacing: -0.03em; text-wrap: balance; }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(42px, 7.4vw, 78px); line-height: 0.9; letter-spacing: -0.035em; }
 h1 span { color: var(--p1); }
-.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.mcard { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: 20px; background: rgba(9, 15, 17, 0.82); border: 1px solid var(--edge); }
-.mcard-head h2 { margin: 0 0 4px; font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
-.mcard-head p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.4; }
+
+.me-chip { display: flex; align-items: center; gap: 12px; padding: 7px 16px 7px 7px; border-radius: 999px; border: 1px solid var(--edge); background: var(--surface); text-align: left; }
+.me-chip:hover { border-color: rgba(232, 239, 233, 0.32); }
+.ava { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--p1); color: var(--p1-ink); font: 700 17px var(--font-display); }
+.ava.big { width: 64px; height: 64px; font-size: 26px; margin: 0 auto; }
+.me-txt { display: grid; gap: 2px; }
+.me-txt b { font-size: 15px; font-weight: 600; }
+.me-txt small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.me-chip .pen { color: var(--muted); font-size: 14px; margin-left: 2px; }
+
+.panel { border-radius: 20px; background: var(--surface); border: 1px solid var(--edge); }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mcard { display: flex; flex-direction: column; gap: 20px; padding: 22px; position: relative; overflow: hidden; }
+.mcard::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--c), transparent 75%); }
+.mcard.ai { --c: var(--p1); --c-ink: var(--p1-ink); }
+.mcard.net { --c: var(--p2); --c-ink: var(--p2-ink); }
+.mcard-head { display: grid; gap: 6px; }
+.mcard-head h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
+.mcard-head h2::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }
+.mcard-head p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.45; min-height: 2.9em; }
 .mcard-body { display: grid; gap: 10px; margin-top: auto; }
 .mcard-body[hidden] { display: none; }
-.btn { border: 1px solid var(--edge); background: transparent; border-radius: 12px; padding: 13px 18px; font-family: var(--font-display); font-weight: 500; font-size: 14px; }
+
+.btn { border: 1px solid var(--edge); background: transparent; border-radius: 12px; padding: 13px 18px; font-family: var(--font-display); font-weight: 500; font-size: 14px; transition: filter 0.15s, border-color 0.15s, background 0.15s; }
 .btn.block { width: 100%; }
-.btn.primary { background: var(--p1); border-color: var(--p1); color: #1c0c06; font-weight: 700; }
+.btn.primary { background: var(--p1); border-color: var(--p1); color: var(--p1-ink); font-weight: 700; }
+.btn.accent { background: var(--c); border-color: var(--c); color: var(--c-ink); font-weight: 700; }
 .btn.soft { background: rgba(232, 239, 233, 0.07); }
-.btn:hover { border-color: var(--ink); }
-.btn.primary:hover { filter: brightness(1.08); }
-.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); border-radius: 12px; padding: 3px; gap: 3px; }
+.btn:hover { border-color: rgba(232, 239, 233, 0.4); }
+.btn.primary:hover, .btn.accent:hover { filter: brightness(1.08); border-color: transparent; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); border-radius: 12px; padding: 3px; gap: 3px; background: rgba(0, 0, 0, 0.18); }
 .seg button { border: 0; background: transparent; border-radius: 9px; padding: 9px 6px; font-size: 13px; color: var(--muted); }
+.seg button:hover { color: var(--ink); }
 .seg button[aria-checked="true"] { background: var(--ink); color: var(--hall); font-weight: 600; }
 .or { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--edge); }
-.controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; --accent: var(--p1); }
-.controls p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 36ch; }
-.caps { display: grid; grid-template-columns: repeat(3, 56px); gap: 5px; }
-.cap { height: 48px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; }
+
+.bottom { display: grid; grid-template-columns: minmax(0, 1fr) 232px; gap: 16px; align-items: stretch; }
+.panel-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.lb { padding: 18px 20px 14px; display: grid; gap: 8px; align-content: start; }
+.lb table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.lb th { white-space: nowrap; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; text-align: right; padding: 4px 0 6px; }
+.lb td { padding: 8px 0; border-top: 1px solid var(--edge); text-align: right; white-space: nowrap; }
+.lb th + th, .lb td + td { padding-left: 16px; }
+.lb th.l, .lb td.l { text-align: left; }
+.lb td.rank { width: 22px; color: var(--muted); font: 700 13px var(--font-display); }
+.lb tr.top td.rank { color: var(--lamp); }
+.lb td.name { overflow: hidden; text-overflow: ellipsis; max-width: 0; width: 100%; padding-right: 8px; }
+.lb td .of { color: var(--muted); font-size: 12px; }
+.lb tr.me td.name { color: var(--lamp); }
+.lb .tag { font-size: 11px; color: var(--lamp); margin-left: 6px; opacity: 0.8; }
+.lb .empty { margin: 2px 0 4px; font-size: 13px; color: var(--muted); }
+.lb .empty[hidden] { display: none; }
+.lb .foot { margin: 2px 0 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
+.keys-panel { padding: 18px 20px; display: grid; gap: 14px; align-content: start; --accent: var(--p1); }
+.keys-panel p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.caps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.cap { height: 50px; border-radius: 10px; background: #172324; border-bottom: 3px solid #060b0c; display: grid; place-items: center; align-content: center; gap: 1px; }
 .cap b { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
 .cap small { font-size: 10px; color: var(--muted); }
 .cap.shot b { color: var(--accent); }
 .cap.shot { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
-.hello { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
-.hello b { color: var(--ink); font-weight: 600; }
-.bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: start; }
-.lb { padding: 16px 18px 12px; border-radius: 20px; background: rgba(9, 15, 17, 0.82); border: 1px solid var(--edge); }
-.lb-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-.lb-head h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
-.lb-head span { font-size: 12px; color: var(--muted); }
-.lb table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
-.lb th { white-space: nowrap; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; text-align: right; padding: 4px 0 6px; }
-.lb td { padding: 7px 0; border-top: 1px solid var(--edge); text-align: right; white-space: nowrap; }
-.lb th.l, .lb td.l { text-align: left; }
-.lb td.rank { width: 26px; color: var(--muted); }
-.lb td.name { overflow: hidden; text-overflow: ellipsis; max-width: 0; width: 100%; padding-right: 12px; }
-.lb td .of { color: var(--muted); font-size: 12px; }
-.lb th + th, .lb td + td { padding-left: 14px; }
-.lb tr.me td.name { color: var(--lamp); }
-.lb .tag { font-size: 11px; color: var(--lamp); margin-left: 6px; }
-.lb .empty { margin: 4px 0 6px; font-size: 13px; color: var(--muted); }
-.lb .empty[hidden] { display: none; }
-.controls { flex-direction: column; align-items: flex-start; gap: 10px; }
-.controls p { max-width: 186px; }
-.field { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--edge); background: #0e1719; color: var(--ink); font: 500 16px var(--font-body); }
-.card-sub { margin: -8px 0 0; color: var(--muted); font-size: 14px; }
+.field { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--edge); background: #0e1719; color: var(--ink); font: 500 16px var(--font-body); text-align: center; }
+.card-sub { margin: -8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
 .only-touch { display: none; }
 .touch-note { margin: 0; font-size: 13px; color: var(--muted); }
 
-/* Пауза и конец партии */
-.card { width: min(420px, 100%); padding: 24px; border-radius: 18px; background: var(--panel); border: 1px solid var(--edge); display: grid; gap: 16px; text-align: center; }
-.card h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 26px; text-wrap: balance; }
-.card .final { font-family: var(--font-display); font-weight: 900; font-size: 54px; font-variant-numeric: tabular-nums; line-height: 1; }
+/* Окна: имя, пауза, конец партии */
+.card { width: min(400px, 100%); padding: 28px 26px 24px; border-radius: 22px; background: var(--surface); border: 1px solid var(--edge); display: grid; gap: 16px; text-align: center; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
+.card h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 24px; text-wrap: balance; }
+.card .final { font-family: var(--font-display); font-weight: 900; font-size: 56px; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.02em; }
+.card .final .won { color: var(--lamp); }
 .card .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-#pause, #over { background: rgba(8, 13, 15, 0.6); }
+.card .row .btn { flex: 1 1 140px; }
+#pause, #over, #netlost { background: rgba(8, 13, 15, 0.8); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 
 /* Панель настройки */
 #tune { position: fixed; top: 62px; right: 14px; width: 290px; max-height: calc(100% - 80px); overflow: auto; padding: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--edge); z-index: 7; display: grid; gap: 14px; }
@@ -158,11 +180,13 @@ body.touch .only-keys { display: none; }
 .wait-actions .btn { padding: 10px 14px; font-size: 13px; }
 .linkbtn { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
 #board .mid { font-variant-numeric: tabular-nums; }
-@media (max-width: 620px) { .cards, .bottom { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .cards, .bottom { grid-template-columns: 1fr; } .menu-head { align-items: flex-start; } }
+@media (max-width: 480px) { .lb th:nth-child(5), .lb td:nth-child(5) { display: none; } .lb th + th, .lb td + td { padding-left: 10px; } }
 @media (max-height: 520px) {
-  h1 { font-size: 42px; }
-  .menu-inner { gap: 16px; }
-  .mcard { padding: 14px; gap: 12px; }
+  h1 { font-size: 40px; }
+  .menu-inner { gap: 12px; }
+  .mcard { padding: 16px; gap: 14px; }
+  .mcard-head p { min-height: 0; }
 }
 body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibility: hidden; }
 @media (max-width: 560px) {
@@ -201,16 +225,22 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
 <section class="overlay" id="menu" aria-label="Меню">
   <div class="menu-inner">
     <header class="menu-head">
-      <p class="eyebrow">Прототип · одиночка до 15</p>
-      <h1>Бадмин<span>тон</span></h1>
-      <p class="hello">Играешь как <b id="meName">…</b> · <button class="linkbtn" id="editName">сменить имя</button></p>
+      <div class="title-block">
+        <p class="eyebrow">Прототип · партия до 15</p>
+        <h1>Бадмин<span>тон</span></h1>
+      </div>
+      <button class="me-chip" id="editName" title="Сменить имя">
+        <span class="ava" id="meAva" aria-hidden="true">?</span>
+        <span class="me-txt"><b id="meName">…</b><small id="meBest">смэшей пока не было</small></span>
+        <span class="pen" aria-hidden="true">✎</span>
+      </button>
     </header>
 
     <div class="cards">
-      <article class="mcard">
+      <article class="mcard panel ai">
         <div class="mcard-head">
           <h2>Против ИИ</h2>
-          <p>Выбери уровень соперника</p>
+          <p id="diffNote">Держит розыгрыш, но ошибается под давлением</p>
         </div>
         <div class="mcard-body">
           <div class="seg" role="radiogroup" aria-label="Сложность ИИ" id="diffSeg">
@@ -218,17 +248,17 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
             <button role="radio" data-diff="medium" aria-checked="true">Средний</button>
             <button role="radio" data-diff="hard" aria-checked="false">Сложный</button>
           </div>
-          <button class="btn primary block" id="playAi">Играть</button>
+          <button class="btn accent block" id="playAi">Играть</button>
         </div>
       </article>
 
-      <article class="mcard" id="onlineCard">
+      <article class="mcard panel net" id="onlineCard">
         <div class="mcard-head">
           <h2>С другом по сети</h2>
-          <p>Один создаёт комнату, второй входит по коду</p>
+          <p>Один создаёт комнату, второй входит по коду. Каждый видит себя слева</p>
         </div>
         <div class="mcard-body" id="netControls">
-          <button class="btn soft block" id="netHost">Создать комнату</button>
+          <button class="btn accent block" id="netHost">Создать комнату</button>
           <div class="or">или войти по коду</div>
           <div class="net-join">
             <input id="netCode" maxlength="4" placeholder="Код" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код комнаты">
@@ -240,25 +270,27 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
     </div>
 
     <div class="bottom">
-    <section class="lb" aria-label="Таблица побед">
-      <div class="lb-head"><h2>Таблица</h2><span>Обновляется, когда вы играете друг с другом</span></div>
-      <table>
-        <thead><tr><th class="l">#</th><th class="l">Игрок</th><th>Победы</th><th>Против ИИ</th></tr></thead>
-        <tbody id="lbBody"></tbody>
-      </table>
-      <p class="empty" id="lbEmpty">Пока пусто. Сыграй партию, и ты появишься здесь.</p>
-    </section>
-    <div class="controls only-keys">
-      <div class="caps" aria-label="Управление">
-        <div class="cap shot"><b>Q</b><small>клир</small></div>
-        <div class="cap"><b>W</b><small>прыжок</small></div>
-        <div class="cap shot"><b>E</b><small>дроп</small></div>
-        <div class="cap"><b>A</b><small>назад</small></div>
-        <div class="cap shot"><b>S</b><small>смэш</small></div>
-        <div class="cap"><b>D</b><small>к сетке</small></div>
-      </div>
-      <p>Если волан ниже плеча, эти же кнопки дают свечу, сетку и драйв. <kbd>Esc</kbd> пауза</p>
-    </div>
+      <section class="lb panel" aria-label="Таблица побед">
+        <h2 class="panel-title">Таблица</h2>
+        <table>
+          <thead><tr><th class="l">#</th><th class="l">Игрок</th><th>Победы</th><th>Против ИИ</th><th>Смэш</th></tr></thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+        <p class="empty" id="lbEmpty">Пока пусто. Сыграй партию, и ты появишься здесь.</p>
+        <p class="foot">Результаты хранятся у каждого и обмениваются, когда вы играете по сети</p>
+      </section>
+      <section class="keys-panel panel only-keys" aria-label="Управление">
+        <h2 class="panel-title">Управление</h2>
+        <div class="caps">
+          <div class="cap shot"><b>Q</b><small>клир</small></div>
+          <div class="cap"><b>W</b><small>прыжок</small></div>
+          <div class="cap shot"><b>E</b><small>дроп</small></div>
+          <div class="cap"><b>A</b><small>назад</small></div>
+          <div class="cap shot"><b>S</b><small>смэш</small></div>
+          <div class="cap"><b>D</b><small>к сетке</small></div>
+        </div>
+        <p>Ниже плеча те же кнопки дают свечу, сетку и драйв. <kbd>Esc</kbd> пауза</p>
+      </section>
     </div>
     <p class="touch-note only-touch">Слева бег, справа удары. Держи телефон горизонтально.</p>
   </div>
@@ -266,6 +298,7 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
 
 <section class="overlay" id="nameDlg" hidden aria-label="Имя игрока">
   <form class="card" id="nameForm" novalidate>
+    <span class="ava big" id="nameAva" aria-hidden="true">?</span>
     <h2>Как тебя зовут?</h2>
     <p class="card-sub">Имя увидят соперники и таблица побед</p>
     <input class="field" id="nameInput" maxlength="16" autocomplete="nickname" placeholder="Имя" aria-label="Имя">
@@ -293,7 +326,8 @@ body.menu-open #board, body.menu-open #btnPause, body.menu-open #touch { visibil
 <section class="overlay" id="over" hidden aria-label="Конец партии">
   <div class="card">
     <h2 id="overTitle">Партия</h2>
-    <div class="final" id="overScore">21 : 15</div>
+    <p class="card-sub" id="overSub"></p>
+    <div class="final" id="overScore">15 : 11</div>
     <div class="row">
       <button class="btn primary" id="again">Ещё партия</button>
       <button class="btn" id="toMenu2">В меню</button>
@@ -554,7 +588,7 @@ function launch(p, sol, v) {
   fx('popup', SHOT_LABEL[v] + (fast ? ' · ' + kmh + ' км/ч' : ''), +sh.x.toFixed(2), +(sh.y + 0.45).toFixed(2), p.color, v === 'smash', false);
   if (v === 'smash') {
     if (offline) game.hitstop = 0.075;
-    fx('shake', 7); fx('wall', kmh, p.color); fx('hit', 1);
+    fx('shake', 7); fx('wall', kmh, p.color, p.idx); fx('hit', 1);
   } else {
     if (offline) game.hitstop = 0.022;
     fx('hit', v === 'net' || v === 'short' || v === 'block' ? 0.15 : v === 'drop' ? 0.35 : 0.6);
@@ -793,7 +827,12 @@ function showOver() {
   else if (game.mode === '1p') title = w === 0 ? 'Партия за тобой' : 'Партия за ИИ';
   else title = w === 0 ? 'Победил игрок слева' : 'Победил игрок справа';
   $('overTitle').textContent = title;
-  $('overScore').textContent = game.score[me] + ' : ' + game.score[1 - me];
+  $('overSub').textContent = game.mode === 'online' ? 'Онлайн · ' + (Net.peerName || 'друг') : game.mode === '1p' ? 'Против ИИ · ' + DIFFS[game.diff].label : '';
+  const os = $('overScore'); os.textContent = '';
+  const a = document.createElement('span'), b = document.createElement('span');
+  a.textContent = game.score[me]; b.textContent = game.score[1 - me];
+  (w === me ? a : b).className = 'won';
+  os.append(a, ' : ', b);
   $('over').hidden = false;
   $('again').focus();
 }
@@ -1267,6 +1306,7 @@ for (const b of document.querySelectorAll('#diffSeg button')) {
   b.addEventListener('click', () => {
     game.diff = b.dataset.diff;
     for (const o of document.querySelectorAll('#diffSeg button')) o.setAttribute('aria-checked', String(o === b));
+    renderDiffNote();
   });
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden && game.mode !== 'demo' && game.mode !== 'online' && game.state !== 'over' && $('menu').hidden) togglePause(true); });
@@ -1557,7 +1597,7 @@ function applyFx(type, a) {
   switch (type) {
     case 'popup': addPopup(a[0], a[1], a[2], a[3], a[4], a[5]); break;
     case 'shake': game.shake = reducedMotion ? 0 : a[0]; break;
-    case 'wall': game.wall = { kmh: a[0], t: 0, color: a[1] }; break;
+    case 'wall': game.wall = { kmh: a[0], t: 0, color: a[1] }; if (a[2] === localIdx() && (game.mode === '1p' || game.mode === 'online')) updateBest(a[0]); break;
     case 'hit': sndHit(a[0]); break;
     case 'net': sndNet(); break;
     case 'floor': sndFloor(); break;
@@ -1582,6 +1622,7 @@ $('netCode').addEventListener('input', e => { const v = e.target.value.toUpperCa
    при каждом онлайн-подключении, поэтому таблица постепенно сходится у всей компании без сервера. */
 // ?p=2 — второй профиль в том же браузере, для проверки на одном компьютере
 const SLOT = (/[?&]p=(\d)\b/.exec(location.search) || [])[1] || '';
+const PID = /^[a-z0-9]{6,16}$/;
 function loadJSON(k, d) { k += SLOT; try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } }
 function saveJSON(k, v) { k += SLOT; try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
 function rid(n) { const a = 'abcdefghijkmnpqrstuvwxyz23456789'; let s = ''; for (let i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
@@ -1590,8 +1631,10 @@ const profile = loadJSON('bdm-profile', null) || {};
 if (typeof profile.pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(profile.pid)) profile.pid = rid(10);
 profile.name = cleanName(profile.name);
 const store = { recs: [], names: {} };
-{ const r = loadJSON('bdm-recs', []), n = loadJSON('bdm-names', {}); if (Array.isArray(r)) store.recs = r; if (n && typeof n === 'object') store.names = n; }
-function saveStore() { if (store.recs.length > 800) store.recs = store.recs.slice(-800); saveJSON('bdm-recs', store.recs); saveJSON('bdm-names', store.names); }
+{ const r = loadJSON('bdm-recs', []), n = loadJSON('bdm-names', {}), b = loadJSON('bdm-best', {}); if (Array.isArray(r)) store.recs = r; if (n && typeof n === 'object') store.names = n; store.best = b && typeof b === 'object' ? b : {}; }
+function saveStore() { if (store.recs.length > 800) store.recs = store.recs.slice(-800); saveJSON('bdm-recs', store.recs); saveJSON('bdm-names', store.names); saveJSON('bdm-best', store.best); }
+function noteBest(pid, kmh) { if (!PID.test(pid) || !Number.isInteger(kmh) || kmh < 20 || kmh > 400) return false; if ((store.best[pid] || 0) >= kmh) return false; store.best[pid] = kmh; return true; }
+function updateBest(kmh) { if (noteBest(profile.pid, kmh)) { saveStore(); renderHello(); renderStandings(); } }
 function noteName(pid, name, t) {
   name = cleanName(name);
   if (typeof pid !== 'string' || !/^[a-z0-9]{6,16}$/.test(pid) || !name || !Number.isFinite(t)) return false;
@@ -1599,7 +1642,6 @@ function noteName(pid, name, t) {
   if (!Array.isArray(cur) || !(cur[1] >= t)) { store.names[pid] = [name, t]; return true; }
   return false;
 }
-const PID = /^[a-z0-9]{6,16}$/;
 function cleanRec(r) {
   if (!r || typeof r.id !== 'string' || !/^[a-z0-9]{8,24}$/.test(r.id) || !Number.isFinite(r.t)) return null;
   const s = Array.isArray(r.s) && r.s.length === 2 && r.s.every(v => Number.isInteger(v) && v >= 0 && v <= 30) ? [r.s[0], r.s[1]] : [0, 0];
@@ -1621,7 +1663,8 @@ function standings() {
     if (r.k === 'net') { const a = row(r.a), b = row(r.b); a.n++; b.n++; (r.w === r.a ? a : b).w++; }
     else { const a = row(r.p); a.an++; if (r.win) { a.aw++; a.lv[r.lv]++; } }
   }
-  const rows = Object.values(st).map(x => ({ ...x, name: (store.names[x.pid] && store.names[x.pid][0]) || (x.pid === profile.pid ? profile.name : 'Игрок') }));
+  if (profile.name && !st[profile.pid] && store.best[profile.pid]) row(profile.pid);
+  const rows = Object.values(st).map(x => ({ ...x, best: store.best[x.pid] || 0, name: (store.names[x.pid] && store.names[x.pid][0]) || (x.pid === profile.pid ? profile.name : 'Игрок') }));
   rows.sort((a, b) => b.w - a.w || (b.w - (b.n - b.w)) - (a.w - (a.n - a.w)) || b.aw - a.aw || a.name.localeCompare(b.name));
   return rows;
 }
@@ -1634,7 +1677,7 @@ function renderStandings() {
   body.textContent = '';
   for (const r of shown) {
     const tr = document.createElement('tr');
-    if (r.pid === profile.pid) tr.className = 'me';
+    tr.className = (r.pid === profile.pid ? 'me ' : '') + (rows.indexOf(r) === 0 ? 'top' : '');
     const td = (cls, txt) => { const c = document.createElement('td'); if (cls) c.className = cls; if (txt !== undefined) c.textContent = txt; tr.appendChild(c); return c; };
     td('rank l', String(rows.indexOf(r) + 1));
     const nm = td('name l', r.name);
@@ -1643,12 +1686,22 @@ function renderStandings() {
     cell(r.w, r.n);
     const ai = cell(r.aw, r.an);
     ai.title = 'Победы над ИИ: лёгкий ' + r.lv.easy + ' · средний ' + r.lv.medium + ' · сложный ' + r.lv.hard;
+    const sm = td(''); sm.textContent = r.best ? String(r.best) : '—';
+    if (r.best) { const u = document.createElement('span'); u.className = 'of'; u.textContent = ' км/ч'; sm.appendChild(u); }
     body.appendChild(tr);
   }
   $('lbEmpty').hidden = rows.length > 0;
 }
-function renderHello() { $('meName').textContent = profile.name || '…'; }
-function openNameDlg() { $('nameInput').value = profile.name || ''; $('nameDlg').hidden = false; setTimeout(() => $('nameInput').focus(), 30); }
+function renderHello() {
+  $('meName').textContent = profile.name || 'Без имени';
+  $('meAva').textContent = (profile.name || '?').charAt(0).toUpperCase();
+  const b = store.best[profile.pid];
+  $('meBest').textContent = b ? 'лучший смэш ' + b + ' км/ч' : 'смэшей пока не было';
+}
+const DIFF_NOTE = { easy: 'Медленный и часто ошибается. Для разминки', medium: 'Держит розыгрыш, но ошибается под давлением', hard: 'Быстрая реакция, редкие ошибки, любит смэш' };
+function renderDiffNote() { $('diffNote').textContent = DIFF_NOTE[game.diff]; }
+$('nameInput').addEventListener('input', e => { $('nameAva').textContent = (cleanName(e.target.value) || '?').charAt(0).toUpperCase(); });
+function openNameDlg() { $('nameInput').value = profile.name || ''; $('nameAva').textContent = (profile.name || '?').charAt(0).toUpperCase(); $('nameDlg').hidden = false; setTimeout(() => $('nameInput').focus(), 30); }
 function needName() { if (profile.name) return false; openNameDlg(); return true; }
 $('nameForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -1672,7 +1725,7 @@ function startSync() {
   const total = Math.max(6, chunks.length * 3);
   Net.syncIv = setInterval(() => {
     if (!Net.connected || i >= total) { clearInterval(Net.syncIv); return; }
-    if (i % 3 === 0) Net.send({ t: 'sync', n: names });
+    if (i % 3 === 0) Net.send({ t: 'sync', n: names, b: store.best });
     else if (chunks.length) Net.send({ t: 'sync', r: chunks[i % chunks.length] });
     i++;
   }, 300);
@@ -1680,6 +1733,7 @@ function startSync() {
 function onSync(m) {
   let changed = false;
   if (m.n && typeof m.n === 'object') for (const pid of Object.keys(m.n).slice(0, 200)) { const v = m.n[pid]; if (Array.isArray(v) && noteName(pid, v[0], v[1])) changed = true; }
+  if (m.b && typeof m.b === 'object') for (const pid of Object.keys(m.b).slice(0, 200)) if (noteBest(pid, m.b[pid])) changed = true;
   if (changed) { saveStore(); renderStandings(); }
   if (m.r) addRecs(m.r.slice(0, 60));
 }
@@ -1734,7 +1788,7 @@ function start(data) {
   if (hm) { $('netCode').value = hm[1].toUpperCase(); setNetStatus('Код из ссылки уже подставлен, нажми «Войти».'); }
   if (inClaude() && !USE_LOCAL) { $('netControls').hidden = true; setNetStatus('Внутри claude.ai браузер не даёт игрокам соединиться напрямую. Играй по сети на сайте: <a href="https://korolevdesgn-gif.github.io/badminton/" style="color: var(--ink)">korolevdesgn-gif.github.io/badminton</a>'); }
   window.addEventListener('beforeunload', () => { if (Net.role) netClose(); });
-  renderHello(); renderStandings();
+  renderHello(); renderStandings(); renderDiffNote();
   if (!profile.name) openNameDlg();
   requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 }
